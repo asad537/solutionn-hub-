@@ -1,0 +1,25 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Use one canonical hostname everywhere.
+    RewriteCond %{HTTP_HOST} !^solutionhub\.digital$ [NC]
+    RewriteRule ^ https://solutionhub.digital%{REQUEST_URI} [R=301,L,NE]
+
+    # Strip trailing slashes for clean canonical URLs and prevent public path leakage in redirects
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ https://solutionhub.digital%1 [R=301,L,NE]
+
+    # Keep front-controller filenames out of browser-facing URLs.
+    RewriteCond %{THE_REQUEST} \s/+((?:public/)?index\.php)(?:[?\s]) [NC]
+    RewriteRule ^(?:public/)?index\.php$ https://solutionhub.digital/ [R=301,L,NE]
+
+    # Keep Laravel's public directory out of browser-facing URLs.
+    # THE_REQUEST ensures this only redirects direct client requests and does
+    # not interfere with the internal rewrite to public/ below.
+    RewriteCond %{THE_REQUEST} \s/+public(?:[/?\s]) [NC]
+    RewriteRule ^public(?:/(.*))?$ /$1 [R=301,L,NE]
+
+    # Internally serve the application from Laravel's public directory.
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

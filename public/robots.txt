@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /analyze
+Disallow: /download-file
+Disallow: /prepare-plugin-download
+
+Sitemap: https://solutionhub.digital/sitemap.xml

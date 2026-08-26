@@ -1,0 +1,42 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Canonicalize direct requests that expose Laravel's public directory.
+    # Internal rewrites retain the original clean THE_REQUEST and are unaffected.
+    RewriteCond %{THE_REQUEST} \s/+public/index\.php(?:[?\s]) [NC]
+    RewriteRule ^index\.php$ https://solutionhub.digital/ [R=301,L,NE]
+
+    RewriteCond %{THE_REQUEST} \s/+public(?:/([^?\s]*))?[?\s] [NC]
+    RewriteRule ^ https://solutionhub.digital/%1 [R=301,L,NE]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Serve crawler files directly without starting Laravel sessions.
+<IfModule mod_mime.c>
+    AddType application/xml .xml
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "^(?:pages-)?sitemap\.xml$">
+        Header always set Cache-Control "public, max-age=3600"
+        Header always set X-Content-Type-Options "nosniff"
+        Header always unset Set-Cookie
+    </FilesMatch>
+</IfModule>
