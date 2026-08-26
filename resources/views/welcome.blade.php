@@ -146,43 +146,60 @@
           ]
         }
         </script>
+        @php
+            $homeFaqSchemaList = [];
+            if(isset($faqs) && $faqs->count() > 0) {
+                foreach($faqs as $faq) {
+                    $homeFaqSchemaList[] = [
+                        '@type' => 'Question',
+                        'name' => strip_tags($faq->question),
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => strip_tags($faq->answer),
+                        ]
+                    ];
+                }
+            } else {
+                $homeFaqSchemaList = [
+                    [
+                        '@type' => 'Question',
+                        'name' => 'Do I need to install an app?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'No. The analyzer runs in your browser on mobile and desktop devices.'
+                        ]
+                    ],
+                    [
+                        '@type' => 'Question',
+                        'name' => 'Which video qualities are available?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'Available formats depend on the source and may include SD, 720p, 1080p, and audio-only options.'
+                        ]
+                    ],
+                    [
+                        '@type' => 'Question',
+                        'name' => 'Is Solution Hub free?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'Yes, the basic public-link analysis experience runs in the browser.'
+                        ]
+                    ],
+                    [
+                        '@type' => 'Question',
+                        'name' => 'Can I use any video?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'Only use content you own or have permission to save, and follow the source platform\'s terms.'
+                        ]
+                    ]
+                ];
+            }
+        @endphp
         <script type="application/ld+json">{!! json_encode([
             '@context' => 'https://schema.org',
             '@type' => 'FAQPage',
-            'mainEntity' => [
-                [
-                    '@type' => 'Question',
-                    'name' => 'Do I need to install an app?',
-                    'acceptedAnswer' => [
-                        '@type' => 'Answer',
-                        'text' => 'No. The analyzer runs in your browser on mobile and desktop devices.'
-                    ]
-                ],
-                [
-                    '@type' => 'Question',
-                    'name' => 'Which video qualities are available?',
-                    'acceptedAnswer' => [
-                        '@type' => 'Answer',
-                        'text' => 'Available formats depend on the source and may include SD, 720p, 1080p, and audio-only options.'
-                    ]
-                ],
-                [
-                    '@type' => 'Question',
-                    'name' => 'Is Solution Hub free?',
-                    'acceptedAnswer' => [
-                        '@type' => 'Answer',
-                        'text' => 'Yes, the basic public-link analysis experience runs in the browser.'
-                    ]
-                ],
-                [
-                    '@type' => 'Question',
-                    'name' => 'Can I use any video?',
-                    'acceptedAnswer' => [
-                        '@type' => 'Answer',
-                        'text' => 'Only use content you own or have permission to save, and follow the source platform\'s terms.'
-                    ]
-                ]
-            ]
+            'mainEntity' => $homeFaqSchemaList
         ], JSON_UNESCAPED_SLASHES) !!}</script>
     @elseif($page === 'blog')
         <script type="application/ld+json">
@@ -1267,7 +1284,7 @@
         }
 
         /* Figma-inspired homepage hero */
-        .page-home .topbar {
+        .topbar {
             z-index:1000;
             isolation:isolate;
             padding:0;
@@ -1276,11 +1293,11 @@
             box-shadow:none;
             backdrop-filter:blur(18px);
         }
-        .page-home .nav { width:min(1240px,calc(100% - 128px)); min-height:66px; }
-        .page-home .brand img { width:190px !important; height:auto !important; }
-        .page-home .nav-links { gap:18px; }
-        .page-home .nav-links > a,
-        .page-home .nav-links .dropdown-trigger {
+        .nav { width:min(1240px,calc(100% - 128px)); min-height:66px; }
+        .brand img { width:190px !important; height:auto !important; }
+        .nav-links { gap:18px; }
+        .nav-links > a,
+        .nav-links .dropdown-trigger {
             padding:10px 8px;
             color:#b8bdd0;
             font-size:13px;
@@ -1288,17 +1305,17 @@
             letter-spacing:0;
             text-transform:none;
         }
-        .page-home .nav-links > a:hover,
-        .page-home .nav-links .dropdown-trigger:hover { color:#fff; }
-        .page-home .mega-menu {
+        .nav-links > a:hover,
+        .nav-links .dropdown-trigger:hover { color:#fff; }
+        .mega-menu {
             z-index:1100;
             min-width:480px;
             background:#0f141c;
             border-color:rgba(126,79,255,.24);
         }
-        .page-home .mega-menu-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-        .page-home .lang-btn { min-height:38px; padding:8px 13px; background:#0a1020; border-color:#1c2741; color:#d3d7e2; }
-        .page-home .lang-globe { color:#c8cfdd; stroke:currentColor; }
+        .mega-menu-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        .lang-btn { min-height:38px; padding:8px 13px; background:#0a1020; border-color:#1c2741; color:#d3d7e2; }
+        .lang-globe { color:#c8cfdd; stroke:currentColor; }
 
         .page-home .hero {
             min-height:408px;
@@ -1554,11 +1571,11 @@
         }
 
         @media (max-width:760px) {
-            .page-home .topbar { padding:5px 0; }
-            .page-home .nav { width:min(100% - 24px,1160px); min-height:58px; }
-            .page-home .brand img { width:132px !important; }
-            .page-home .mega-menu { min-width:0; }
-            .page-home .mega-menu-grid { grid-template-columns:1fr; }
+            .topbar { padding:5px 0; }
+            .nav { width:min(100% - 24px,1160px); min-height:58px; }
+            .brand img { width:132px !important; }
+            .mega-menu { min-width:0; }
+            .mega-menu-grid { grid-template-columns:1fr; }
             .page-home .hero { min-height:0; padding:38px 0 34px; }
             .page-home .hero h1 { margin-top:16px; font-size:clamp(36px,11vw,49px) !important; letter-spacing:-1.6px; }
             .page-home .hero-copy { margin-bottom:20px; padding:0 6px; font-size:13px !important; }
@@ -1645,7 +1662,7 @@
         .page-home .legacy-how-section,
         .page-home .steps-section { display:none; }
         .page-home .how-steps-section {
-            padding:64px 0 72px;
+            padding:21px 0 22px;
             background:
                 radial-gradient(circle at 50% 100%,rgba(62,34,164,.08),transparent 48%),
                 linear-gradient(180deg,#060b17 0%,#07101d 100%);
@@ -2392,10 +2409,9 @@
                                 }
                             }
                         @endphp
-                        <h1>Download &amp; Preview<br>Media Links <span>Instantly</span></h1>
+                        <h1>{{ $titleFirst }} @if($titleLast)<span>{{ $titleLast }}</span>@endif</h1>
                         <div class="hero-copy">
-                            Preview and save video, audio, and other media from public links.<br>
-                            Fast, secure, and works on any device.
+                            {!! $parsedDesc !!}
                         </div>
                         <div class="download-panel {{ $result ? 'has-result' : '' }}">
                             <form class="url-form" method="POST" action="{{ route('analyze') }}" id="analyze-form">

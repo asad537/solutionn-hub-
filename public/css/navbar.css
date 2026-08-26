@@ -497,9 +497,8 @@
     z-index: 1000;
     isolation: isolate;
     padding: 0;
-    background: rgba(4, 8, 19, .96);
-    border-top: 1px solid rgba(255, 255, 255, .82);
-    border-bottom: 1px solid rgba(117, 137, 187, .16);
+    background: rgba(4, 8, 19, 0.92);
+    border-bottom: 1px solid rgba(117, 137, 187, 0.16);
     box-shadow: none;
     backdrop-filter: blur(18px);
 }
@@ -598,9 +597,26 @@
         width: min(100% - 48px, 1160px);
         min-height: 58px;
         gap: 8px;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
     }
 
-    .solution-topbar .brand img { width: 160px !important; }
+    .solution-topbar .brand {
+        display: inline-flex !important;
+        align-items: center !important;
+        flex: 0 1 auto;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .solution-topbar .brand img {
+        display: block !important;
+        width: 160px !important;
+        height: auto !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
 
     .solution-topbar .mobile-lang-button {
         display: inline-grid;
@@ -630,8 +646,43 @@
     .solution-topbar .menu-toggle {
         display: inline-grid;
         place-items: center;
+        flex: 0 0 44px;
+        width: 44px !important;
+        height: 44px !important;
         margin-left: 0;
+        padding: 0 !important;
+        color: #9a61ff !important;
+        background: #090f1c !important;
+        border: 1px solid #202a40 !important;
+        border-radius: 10px !important;
+        overflow: hidden;
     }
+
+    .solution-topbar .menu-toggle::before,
+    .solution-topbar .menu-toggle::after { content: none !important; display: none !important; }
+
+    .solution-topbar .menu-toggle > span { display: none !important; }
+
+    .solution-topbar .menu-toggle-icon {
+        display: block !important;
+        width: 23px !important;
+        height: 23px !important;
+        overflow: visible;
+        fill: none !important;
+        stroke: currentColor !important;
+        stroke-width: 2 !important;
+        stroke-linecap: round !important;
+    }
+
+    .solution-topbar .menu-line {
+        transform-box: fill-box;
+        transform-origin: center;
+        transition: transform .2s ease, opacity .2s ease;
+    }
+
+    .solution-topbar .menu-toggle.is-open .menu-line-top { transform: translateY(6px) rotate(45deg); }
+    .solution-topbar .menu-toggle.is-open .menu-line-middle { opacity: 0; }
+    .solution-topbar .menu-toggle.is-open .menu-line-bottom { transform: translateY(-6px) rotate(-45deg); }
 
     .solution-topbar .nav-links {
         position: absolute;

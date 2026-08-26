@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="{{ asset('css/navbar.css') }}?v={{ filemtime(public_path('css/navbar.css')) }}">
 <header class="topbar solution-topbar">
     <nav class="wrap nav solution-nav">
         <a class="brand" href="{{ route('home') }}" aria-label="Solution Hub home">
@@ -7,7 +7,13 @@
         <button class="mobile-lang-button" id="mobileLangButton" type="button" aria-label="Choose language" aria-expanded="false">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
         </button>
-        <button class="menu-toggle" aria-label="Toggle menu"><span></span></button>
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <svg class="menu-toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="menu-line menu-line-top" d="M4 6h16"/>
+                <path class="menu-line menu-line-middle" d="M4 12h16"/>
+                <path class="menu-line menu-line-bottom" d="M4 18h16"/>
+            </svg>
+        </button>
         <div class="nav-links">
             @php
                 $menuPlatforms = \App\Models\Platform::whereNull('parent_id')
@@ -109,7 +115,7 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ route('home') }}#how-it-works">How It Works</a>
+            <a href="{{ request()->routeIs('home') ? '#how-it-works' : route('home') . '#how-it-works' }}">How It Works</a>
             <a class="{{ in_array(($page ?? ''), ['blog', 'blog-post']) ? 'active' : '' }}" href="{{ route('blog') }}">Blog</a>
             <a class="{{ request()->routeIs('public.faqs') ? 'active' : '' }}" href="{{ route('public.faqs') }}">FAQ</a>
             <a class="{{ ($page ?? "") === 'privacy' ? 'active' : '' }}" href="{{ route('privacy') }}">Privacy</a>
@@ -177,6 +183,7 @@
                 if (mobileLangButton) mobileLangButton.setAttribute('aria-expanded', 'false');
                 menuToggle.classList.toggle('is-open');
                 navLinks.classList.toggle('is-open');
+                menuToggle.setAttribute('aria-expanded', menuToggle.classList.contains('is-open') ? 'true' : 'false');
             });
         }
         if (mobileLangButton && navLinks && languageSelector) {
@@ -186,6 +193,7 @@
                 navLinks.classList.toggle('language-focus', willOpen);
                 languageSelector.classList.toggle('open', willOpen);
                 menuToggle?.classList.remove('is-open');
+                menuToggle?.setAttribute('aria-expanded', 'false');
                 mobileLangButton.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
             });
         }
