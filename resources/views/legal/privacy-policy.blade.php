@@ -140,8 +140,6 @@
 
 <body class="has-fixed-header">
     @include('partials.navbar')
-    @include('partials.header', ['headerClass' => 'header-white'])
-
     <main class="legal-wrap">
         <section class="legal-hero">
             <h1>Privacy Policy</h1>

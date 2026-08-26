@@ -629,8 +629,6 @@
 <body class="has-fixed-header">
     @include('partials.navbar')
 
-    @include('partials.header', ['headerClass' => 'header-white'])
-
     <div class="post-wrapper">
 
         {{-- ══ LEFT SIDEBAR ══ --}}

@@ -1,4 +1,4 @@
-<section class="content-band">
+<section class="content-band platform-showcase" id="platform-showcase">
     <div class="wrap">
         <div class="section-head">
             <h2>Supported platforms</h2>
@@ -13,7 +13,7 @@
                     </div>
                     <div class="platform-card-copy">
                         <h3>{{ $platform['name'] }}</h3>
-                        <p>Download public videos in available formats and quality.</p>
+                        <p>Download public videos in available formats.</p>
                     </div>
                 </a>
             @endforeach

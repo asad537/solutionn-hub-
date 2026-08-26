@@ -969,6 +969,7 @@
         .platform-hero p { font-size:14px !important; line-height:1.6; }
     }
 </style>
+    <link rel="stylesheet" href="{{ asset('css/result-dashboard.css') }}">
     @include('partials.adsense-head')
 </head>
 
@@ -988,10 +989,13 @@
         <div class="download-panel {{ isset($result) && $result ? 'has-result' : '' }}">
             <form class="url-form" method="POST" action="{{ route('analyze') }}" id="analyze-form">
                 @csrf
-                <input id="video-url-input" name="video_url" type="url" value="{{ old('video_url') }}" placeholder="Paste a video URL here" aria-label="Video URL" required>
+                <span class="url-input-wrap">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.6 13.4a4 4 0 0 0 5.7 0l3.1-3.1a4 4 0 0 0-5.7-5.7L12 6.3"/><path d="M13.4 10.6a4 4 0 0 0-5.7 0l-3.1 3.1a4 4 0 0 0 5.7 5.7l1.7-1.7"/></svg>
+                    <input id="video-url-input" name="video_url" type="url" value="{{ old('video_url') }}" placeholder="Paste a video URL here" aria-label="Video URL" required>
+                </span>
                 <button id="analyze-btn" class="button" type="submit">
-                    <svg style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    <span>Download</span>
+                    <span>Analyze</span>
+                    <svg class="button-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
                 </button>
             </form>
             @error('video_url')<div class="error" id="error-container" style="color:#ef4444;text-align:center;margin-top:10px;">{{ $message }}</div>@else<div id="error-container" class="error" style="display:none;color:#ef4444;text-align:center;margin-top:10px;"></div>@enderror

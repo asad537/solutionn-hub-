@@ -1,12 +1,14 @@
 <link rel="stylesheet" href="/css/navbar.css">
-<header class="topbar">
-    <nav class="wrap nav">
+<header class="topbar solution-topbar">
+    <nav class="wrap nav solution-nav">
         <a class="brand" href="{{ route('home') }}" aria-label="Solution Hub home">
             <img src="/images/logo-hafiz.svg" alt="Solution Hub" width="190" height="60" style="height:75px;width:auto;object-fit:contain;">
         </a>
+        <button class="mobile-lang-button" id="mobileLangButton" type="button" aria-label="Choose language" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        </button>
         <button class="menu-toggle" aria-label="Toggle menu"><span></span></button>
         <div class="nav-links">
-            <a class="{{ ($page ?? "") === 'home' ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
             @php
                 $menuPlatforms = \App\Models\Platform::whereNull('parent_id')
                     ->where('status', 'active')
@@ -16,6 +18,18 @@
                     }])
                     ->orderBy('name')
                     ->get();
+
+                // Keep the public mega menu useful when navbar visibility has
+                // not yet been configured from the admin panel.
+                if ($menuPlatforms->isEmpty()) {
+                    $menuPlatforms = \App\Models\Platform::whereNull('parent_id')
+                        ->where('status', 'active')
+                        ->with(['children' => function($query) {
+                            $query->where('status', 'active');
+                        }])
+                        ->orderBy('name')
+                        ->get();
+                }
             @endphp
             <div class="nav-dropdown-wrap {{ ($page ?? "") === 'platforms' ? 'active' : '' }}">
                 <a class="dropdown-trigger {{ ($page ?? "") === 'platforms' ? 'active' : '' }}" style="cursor:pointer;">Supported Platforms <svg style="display:inline-block;width:12px;height:12px;margin-left:3px;vertical-align:middle;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
@@ -95,7 +109,9 @@
                     </div>
                 </div>
             </div>
+            <a href="{{ route('home') }}#how-it-works">How It Works</a>
             <a class="{{ in_array(($page ?? ''), ['blog', 'blog-post']) ? 'active' : '' }}" href="{{ route('blog') }}">Blog</a>
+            <a class="{{ request()->routeIs('public.faqs') ? 'active' : '' }}" href="{{ route('public.faqs') }}">FAQ</a>
             <a class="{{ ($page ?? "") === 'privacy' ? 'active' : '' }}" href="{{ route('privacy') }}">Privacy</a>
             <!-- Language Selector -->
             <div class="lang-selector notranslate" id="langSelector" translate="no">
@@ -152,10 +168,25 @@
         // Mobile Toggle
         const menuToggle = document.querySelector('.menu-toggle');
         const navLinks = document.querySelector('.nav-links');
+        const mobileLangButton = document.getElementById('mobileLangButton');
+        const languageSelector = document.getElementById('langSelector');
         if (menuToggle && navLinks) {
             menuToggle.addEventListener('click', function() {
+                navLinks.classList.remove('language-focus');
+                if (languageSelector) languageSelector.classList.remove('open');
+                if (mobileLangButton) mobileLangButton.setAttribute('aria-expanded', 'false');
                 menuToggle.classList.toggle('is-open');
                 navLinks.classList.toggle('is-open');
+            });
+        }
+        if (mobileLangButton && navLinks && languageSelector) {
+            mobileLangButton.addEventListener('click', function() {
+                const willOpen = !navLinks.classList.contains('language-focus');
+                navLinks.classList.toggle('is-open', willOpen);
+                navLinks.classList.toggle('language-focus', willOpen);
+                languageSelector.classList.toggle('open', willOpen);
+                menuToggle?.classList.remove('is-open');
+                mobileLangButton.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
             });
         }
 

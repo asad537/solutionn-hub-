@@ -1265,18 +1265,1100 @@
         @media (max-width:420px) {
             .nav-links { grid-template-columns:1fr; }
         }
+
+        /* Figma-inspired homepage hero */
+        .page-home .topbar {
+            z-index:1000;
+            isolation:isolate;
+            padding:0;
+            background:rgba(4,8,19,.92);
+            border-bottom:1px solid rgba(117,137,187,.16);
+            box-shadow:none;
+            backdrop-filter:blur(18px);
+        }
+        .page-home .nav { width:min(1240px,calc(100% - 128px)); min-height:66px; }
+        .page-home .brand img { width:190px !important; height:auto !important; }
+        .page-home .nav-links { gap:18px; }
+        .page-home .nav-links > a,
+        .page-home .nav-links .dropdown-trigger {
+            padding:10px 8px;
+            color:#b8bdd0;
+            font-size:13px;
+            font-weight:600;
+            letter-spacing:0;
+            text-transform:none;
+        }
+        .page-home .nav-links > a:hover,
+        .page-home .nav-links .dropdown-trigger:hover { color:#fff; }
+        .page-home .mega-menu {
+            z-index:1100;
+            min-width:480px;
+            background:#0f141c;
+            border-color:rgba(126,79,255,.24);
+        }
+        .page-home .mega-menu-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        .page-home .lang-btn { min-height:38px; padding:8px 13px; background:#0a1020; border-color:#1c2741; color:#d3d7e2; }
+        .page-home .lang-globe { color:#c8cfdd; stroke:currentColor; }
+
+        .page-home .hero {
+            min-height:408px;
+            padding:25px 0 18px;
+            isolation:isolate;
+            background:
+                radial-gradient(ellipse at 8% 72%,rgba(84,28,232,.35) 0%,rgba(40,18,126,.2) 19%,transparent 39%),
+                radial-gradient(ellipse at 93% 80%,rgba(71,30,234,.4) 0%,rgba(24,22,111,.22) 21%,transparent 42%),
+                radial-gradient(circle at 52% 12%,rgba(48,35,128,.18),transparent 34%),
+                linear-gradient(180deg,#050916 0%,#070b19 58%,#050816 100%);
+            border-bottom:1px solid rgba(104,78,245,.18);
+        }
+        .page-home .hero::before {
+            z-index:-2;
+            opacity:.58;
+            background-image:radial-gradient(circle,rgba(94,92,227,.48) 1px,transparent 1.35px);
+            background-size:15px 15px;
+            background-position:calc(100% - 42px) 26px;
+            mask-image:linear-gradient(90deg,transparent 0 66%,#000 78%,transparent 100%);
+        }
+        .page-home .hero::after {
+            content:'';
+            position:absolute;
+            inset:0;
+            z-index:-3;
+            pointer-events:none;
+            opacity:.24;
+            background-image:linear-gradient(rgba(102,117,169,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(102,117,169,.09) 1px,transparent 1px);
+            background-size:56px 56px;
+            mask-image:linear-gradient(to bottom,#000,transparent 82%);
+        }
+        .hero-orbit {
+            position:absolute;
+            z-index:-1;
+            width:340px;
+            height:110px;
+            border:3px solid #5a2cff;
+            border-radius:50%;
+            clip-path:inset(48% -24px -24px -24px);
+            filter:drop-shadow(0 0 15px rgba(84,44,255,.55));
+            pointer-events:none;
+            -webkit-mask-image: linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
+            mask-image: linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
+        }
+        .hero-orbit-left { left:-5px; top:153px; width:240px; transform:none; }
+        .hero-orbit-right { right:-40px; top:178px; width:300px; height:120px; transform:none; }
+        .page-home .hero-center { max-width:1000px; }
+        .page-home .hero .eyebrow {
+            gap:7px;
+            padding:7px 14px;
+            color:#aab8ff;
+            background:linear-gradient(90deg,rgba(8,50,96,.7),rgba(72,24,129,.75));
+            border:1px solid rgba(113,71,255,.42);
+            border-radius:999px;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 28px rgba(32,12,92,.28);
+            font-size:10px;
+            letter-spacing:.075em;
+        }
+        .page-home .hero .eyebrow::before { display:none; }
+        .page-home .hero .eyebrow svg { width:13px; height:13px; fill:#23c6ff; filter:drop-shadow(0 0 6px rgba(35,198,255,.45)); }
+        .page-home .hero h1 {
+            max-width:760px;
+            margin:10px auto 8px;
+            color:#fff;
+            font-size:clamp(38px,4vw,52px) !important;
+            font-weight:800;
+            line-height:1;
+            letter-spacing:-1.8px;
+            text-shadow:0 6px 28px rgba(0,0,0,.35);
+        }
+        .page-home .hero h1 span {
+            color:transparent;
+            background:linear-gradient(90deg,#3f7df7 0%,#8c3dff 88%);
+            -webkit-background-clip:text;
+            background-clip:text;
+        }
+        .page-home .hero-copy {
+            max-width:650px;
+            margin:0 auto 15px;
+            color:#9ca7be;
+            font-size:12.5px !important;
+            line-height:1.45;
+        }
+        .page-home .download-panel {
+            width:min(850px,60vw);
+            max-width:850px;
+            margin:0 auto;
+            padding:8px;
+            background:rgba(9,15,31,.86);
+            border:1px solid rgba(118,57,255,.48);
+            border-radius:16px;
+            box-shadow:0 16px 44px rgba(0,0,0,.42),0 0 28px rgba(77,36,221,.1),inset 0 1px 0 rgba(255,255,255,.055);
+        }
+        .page-home .download-panel.has-result { max-width:1120px; }
+        .page-home .url-form { grid-template-columns:minmax(0,1fr) 140px; gap:8px; }
+        .page-home .url-input-wrap { position:relative; display:block; min-width:0; }
+        .page-home .url-input-wrap > svg {
+            position:absolute;
+            left:18px;
+            top:50%;
+            z-index:2;
+            width:20px;
+            height:20px;
+            transform:translateY(-50%);
+            fill:none;
+            stroke:#8b96b2;
+            stroke-width:1.8;
+            stroke-linecap:round;
+            stroke-linejoin:round;
+            pointer-events:none;
+        }
+        .page-home .url-form input {
+            min-height:52px;
+            padding:15px 18px 15px 52px;
+            color:#eef2ff;
+            background:rgba(4,10,23,.9);
+            border:1px solid #273451;
+            border-radius:10px;
+            box-shadow:inset 0 1px 6px rgba(0,0,0,.22);
+            font-size:14px;
+        }
+        .page-home .url-form input:hover { background:#070e20; border-color:#344364; }
+        .page-home .url-form input:focus { background:#070e20; border-color:#7048ff; box-shadow:0 0 0 3px rgba(112,72,255,.14); }
+        .page-home .url-form input::placeholder { color:#828da8; }
+        .page-home .button {
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            min-width:0;
+            min-height:52px;
+            padding:0 14px;
+            color:#fff;
+            background:linear-gradient(135deg,#8f38f6 0%,#5c1ee0 100%);
+            border:1px solid rgba(176,112,255,.65);
+            border-radius:10px;
+            box-shadow:0 9px 24px rgba(94,31,224,.34),inset 0 1px 0 rgba(255,255,255,.22);
+            font-size:12.5px;
+        }
+        .page-home .button .download-label { white-space:nowrap; }
+        .page-home .button:hover { color:#fff; background:linear-gradient(135deg,#a14cff,#6b29ec); transform:translateY(-1px); }
+        .page-home .button-arrow { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+        .page-home .platform-prompt { margin:11px 0 7px; color:#a7afc1; font-size:11px !important; }
+        .page-home .platform-strip { gap:7px; margin:0 auto; }
+        .page-home .platform-pill {
+            gap:7px;
+            min-height:36px;
+            padding:6px 10px;
+            color:#d0d5e2;
+            background:rgba(9,15,29,.84);
+            border:1px solid #202c45;
+            border-radius:7px;
+            box-shadow:0 7px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.025);
+            font-size:11px;
+            font-weight:600;
+        }
+        .page-home .platform-pill:hover { transform:translateY(-1px); border-color:rgba(119,76,255,.56); background:#0d1426; }
+        .page-home .platform-dot { width:20px; height:20px; flex-basis:20px; border-radius:6px; }
+        .page-home .platform-dot img { width:12px; height:12px; }
+        .page-home .hero-trust {
+            display:grid;
+            grid-template-columns:repeat(3,minmax(0,1fr));
+            gap:30px;
+            max-width:570px;
+            margin:18px auto 0;
+            text-align:left;
+        }
+        .page-home .hero-trust-item { display:flex; align-items:center; gap:11px; min-width:0; }
+        .page-home .hero-trust-mobile-only { display:none; }
+        .page-home .hero-trust-icon {
+            display:grid;
+            place-items:center;
+            flex:0 0 42px;
+            width:42px;
+            height:42px;
+            color:#9d57ff;
+            background:rgba(76,26,155,.18);
+            border:1px solid rgba(127,62,255,.3);
+            border-radius:50%;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+        }
+        .page-home .hero-trust-icon svg { width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+        .page-home .hero-trust-item > span:last-child { display:flex; min-width:0; flex-direction:column; gap:3px; }
+        .page-home .hero-trust-item strong { color:#f4f5fb; font-size:12px; line-height:1.2; }
+        .page-home .hero-trust-item small { color:#8994aa; font-size:10px; white-space:nowrap; }
+        .page-home #how-it-works { scroll-margin-top:78px; }
+        .page-home #faq { scroll-margin-top:78px; }
+
+        /* Larger desktop hero scale */
+        @media (min-width:761px) {
+            .page-home .hero {
+                min-height:520px;
+                padding:38px 0 32px;
+            }
+            .page-home .hero-center { max-width:1220px; }
+            .page-home .hero .eyebrow {
+                padding:9px 18px;
+                gap:9px;
+                font-size:12px;
+            }
+            .page-home .hero .eyebrow svg { width:15px; height:15px; }
+            .page-home .hero h1 {
+                max-width:960px;
+                margin:16px auto 13px;
+                font-size:clamp(52px,4.8vw,68px) !important;
+                line-height:1.02;
+                letter-spacing:-2.2px;
+            }
+            .page-home .hero-copy {
+                max-width:780px;
+                margin-bottom:23px;
+                font-size:16px !important;
+                line-height:1.5;
+            }
+            .page-home .download-panel {
+                width:min(1040px,72vw);
+                max-width:1040px;
+                padding:10px;
+            }
+            .page-home .url-form { grid-template-columns:minmax(0,1fr) 180px; gap:10px; }
+            .page-home .url-form input {
+                min-height:62px;
+                padding-left:58px;
+                font-size:16px;
+            }
+            .page-home .url-input-wrap > svg { left:20px; width:23px; height:23px; }
+            .page-home .button {
+                min-height:62px;
+                font-size:15px;
+            }
+            .page-home .platform-prompt { margin:15px 0 10px; font-size:13px !important; }
+            .page-home .platform-strip { gap:10px; }
+            .page-home .platform-pill {
+                min-height:43px;
+                padding:8px 14px;
+                gap:9px;
+                font-size:13px;
+            }
+            .page-home .platform-dot { width:25px; height:25px; flex-basis:25px; }
+            .page-home .platform-dot img { width:15px; height:15px; }
+            .page-home .hero-trust {
+                max-width:760px;
+                margin-top:25px;
+                gap:58px;
+            }
+            .page-home .hero-trust-item { gap:14px; }
+            .page-home .hero-trust-icon { flex-basis:50px; width:50px; height:50px; }
+            .page-home .hero-trust-icon svg { width:25px; height:25px; }
+            .page-home .hero-trust-item strong { font-size:15px; }
+            .page-home .hero-trust-item small { font-size:12px; }
+            .hero-orbit-left { top:210px; width:300px; }
+            .hero-orbit-right { top:245px; width:370px; }
+        }
+
+        @media (max-width:760px) {
+            .page-home .topbar { padding:5px 0; }
+            .page-home .nav { width:min(100% - 24px,1160px); min-height:58px; }
+            .page-home .brand img { width:132px !important; }
+            .page-home .mega-menu { min-width:0; }
+            .page-home .mega-menu-grid { grid-template-columns:1fr; }
+            .page-home .hero { min-height:0; padding:38px 0 34px; }
+            .page-home .hero h1 { margin-top:16px; font-size:clamp(36px,11vw,49px) !important; letter-spacing:-1.6px; }
+            .page-home .hero-copy { margin-bottom:20px; padding:0 6px; font-size:13px !important; }
+            .page-home .download-panel { width:100%; padding:9px; }
+            .page-home .url-form { grid-template-columns:1fr; }
+            .page-home .url-form input { min-height:54px; }
+            .page-home .button { min-height:52px; }
+            .page-home .platform-strip { justify-content:flex-start; }
+            .page-home .hero-trust { gap:12px; margin-top:20px; }
+            .page-home .hero-trust-item { flex-direction:column; gap:7px; text-align:center; }
+            .page-home .hero-trust-item small { white-space:normal; }
+            .hero-orbit { opacity:.55; }
+        }
+        @media (max-width:480px) {
+            .page-home .hero { padding:10px 0 4px; }
+            .page-home .hero-center { width:min(100% - 36px,1000px); }
+            .page-home .hero .eyebrow { padding:6px 11px; font-size:9px; }
+            .page-home .hero h1 {
+                max-width:345px;
+                margin-top:13px;
+                font-size:clamp(27px,7.5vw,31px) !important;
+                line-height:1.03;
+                letter-spacing:-1px;
+            }
+            .page-home .hero-copy {
+                max-width:310px;
+                margin-bottom:13px;
+                font-size:11px !important;
+                line-height:1.45;
+            }
+            .page-home .hero-copy br { display:block; }
+            .page-home .download-panel { border-radius:10px; padding:6px; }
+            .page-home .url-form { gap:6px; }
+            .page-home .url-form input { min-height:48px; padding-left:46px; border-radius:7px; font-size:12px; }
+            .page-home .url-input-wrap > svg { left:15px; width:18px; height:18px; }
+            .page-home .button { min-height:42px; border-radius:7px; font-size:12px; }
+            .page-home .platform-prompt { margin:10px 0 7px; font-size:9px !important; }
+            .page-home .platform-strip {
+                display:grid;
+                grid-template-columns:repeat(3,minmax(0,1fr));
+                gap:7px;
+                width:100%;
+                padding:0;
+                overflow:visible;
+            }
+            .page-home .platform-pill {
+                justify-content:flex-start;
+                width:100%;
+                min-height:38px;
+                padding:6px 8px;
+                font-size:9px;
+                white-space:nowrap;
+            }
+            .page-home .platform-dot { width:19px; height:19px; flex-basis:19px; }
+            .page-home .hero-trust {
+                grid-template-columns:repeat(4,minmax(0,1fr));
+                gap:5px;
+                width:100%;
+                max-width:none;
+                margin-top:11px;
+            }
+            .page-home .hero-trust-item,
+            .page-home .hero-trust-mobile-only {
+                display:flex;
+                min-height:88px;
+                padding:7px 3px 6px;
+                flex-direction:column;
+                justify-content:flex-start;
+                gap:5px;
+                text-align:center;
+                background:rgba(9,15,29,.78);
+                border:1px solid #1b2740;
+                border-radius:8px;
+            }
+            .page-home .hero-trust-icon { flex-basis:36px; width:36px; height:36px; }
+            .page-home .hero-trust-icon svg { width:19px; height:19px; }
+            .page-home .hero-trust-item > span:last-child { align-items:center; gap:2px; }
+            .page-home .hero-trust-item strong { font-size:9px; white-space:nowrap; }
+            .page-home .hero-trust-item small { font-size:7px; line-height:1.25; white-space:normal; }
+            .page-home .hero-orbit { opacity:.3; }
+        }
+
+        /* Figma-style three-step workflow */
+        .page-home .legacy-how-section,
+        .page-home .steps-section { display:none; }
+        .page-home .how-steps-section {
+            padding:64px 0 72px;
+            background:
+                radial-gradient(circle at 50% 100%,rgba(62,34,164,.08),transparent 48%),
+                linear-gradient(180deg,#060b17 0%,#07101d 100%);
+            border-top:1px solid rgba(103,77,244,.16);
+            border-bottom:1px solid rgba(103,77,244,.12);
+        }
+        .page-home .how-steps-intro { margin:0 auto 38px; text-align:center; }
+        .page-home .how-steps-intro h2 {
+            margin:0 0 7px;
+            color:#f7f8fc;
+            font-size:36px !important;
+            font-weight:800;
+            line-height:1.15;
+            letter-spacing:-.5px;
+        }
+        .page-home .how-steps-intro p {
+            margin:0;
+            color:#9ba6bb;
+            font-size:15px !important;
+            line-height:1.5;
+        }
+        .page-home .how-steps-grid {
+            display:grid;
+            grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr) 34px minmax(0,1fr);
+            align-items:center;
+            gap:18px;
+            max-width:1160px;
+            margin:0 auto;
+        }
+        .page-home .how-step-card {
+            position:relative;
+            display:flex;
+            min-height:235px;
+            padding:28px 30px 25px;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            color:#fff;
+            text-align:center;
+            background:linear-gradient(145deg,rgba(13,22,38,.98),rgba(8,15,28,.98));
+            border:1px solid #1d2a42;
+            border-radius:11px;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 14px 35px rgba(0,0,0,.18);
+            transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+        }
+        .page-home .how-step-card:hover {
+            transform:translateY(-3px);
+            border-color:rgba(121,70,255,.48);
+            box-shadow:0 18px 42px rgba(0,0,0,.3),0 0 24px rgba(88,41,213,.08);
+        }
+        .page-home .how-step-number {
+            position:absolute;
+            top:16px;
+            left:16px;
+            display:grid;
+            place-items:center;
+            width:38px;
+            height:38px;
+            color:#b795ff;
+            background:rgba(98,48,194,.22);
+            border:1px solid rgba(131,76,245,.18);
+            border-radius:50%;
+            font-size:12px;
+            font-weight:800;
+        }
+        .page-home .how-step-icon {
+            display:grid;
+            place-items:center;
+            width:64px;
+            height:64px;
+            margin:0 0 17px;
+            color:#8854ff;
+            background:linear-gradient(145deg,rgba(61,34,128,.34),rgba(22,24,56,.7));
+            border:1px solid rgba(116,68,230,.2);
+            border-radius:11px;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 8px 22px rgba(0,0,0,.18);
+        }
+        .page-home .how-step-icon svg,
+        .page-home .how-step-arrow svg {
+            fill:none;
+            stroke:currentColor;
+            stroke-width:1.8;
+            stroke-linecap:round;
+            stroke-linejoin:round;
+        }
+        .page-home .how-step-icon svg { width:29px; height:29px; }
+        .page-home .how-step-card h3 {
+            margin:0 0 7px;
+            color:#f5f6fb;
+            font-size:18px !important;
+            font-weight:800;
+            line-height:1.2;
+        }
+        .page-home .how-step-card p {
+            max-width:255px;
+            margin:0;
+            color:#9da8bc;
+            font-size:13px !important;
+            line-height:1.55;
+        }
+        .page-home .how-step-arrow { display:grid; place-items:center; color:#a648ff; }
+        .page-home .how-step-arrow svg { width:34px; height:20px; }
+
+        /* Why choose us feature row */
+        .page-home .why-choose-section {
+            scroll-margin-top:66px;
+            padding:64px 0 72px;
+            background:
+                radial-gradient(circle at 50% 0,rgba(54,31,139,.07),transparent 45%),
+                linear-gradient(180deg,#060b17 0%,#070d19 100%);
+            border-bottom:1px solid rgba(103,77,244,.13);
+        }
+        .page-home .why-choose-intro { margin:0 auto 38px; text-align:center; }
+        .page-home .why-choose-intro h2 {
+            margin:0 0 5px;
+            color:#f7f8fc;
+            font-size:36px !important;
+            font-weight:800;
+            line-height:1.2;
+            letter-spacing:-.45px;
+        }
+        .page-home .why-choose-intro p {
+            margin:0;
+            color:#929db2;
+            font-size:15px !important;
+            line-height:1.5;
+        }
+        .page-home .why-choose-grid {
+            display:grid;
+            grid-template-columns:repeat(4,minmax(0,1fr));
+            gap:16px;
+            max-width:1160px;
+            margin:0 auto;
+        }
+        .page-home .why-card {
+            position:relative;
+            display:flex;
+            min-height:190px;
+            padding:25px 25px 25px;
+            align-items:flex-start;
+            gap:16px;
+            overflow:hidden;
+            background:linear-gradient(145deg,rgba(14,23,39,.98),rgba(9,16,29,.98));
+            border:1px solid #1c2940;
+            border-radius:10px;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 12px 30px rgba(0,0,0,.16);
+            transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+        }
+        .page-home .why-card:hover {
+            transform:translateY(-3px);
+            border-color:rgba(113,70,218,.46);
+            box-shadow:0 17px 38px rgba(0,0,0,.28);
+        }
+        .page-home .why-card::after {
+            content:'';
+            position:absolute;
+            width:85px;
+            height:85px;
+            top:-48px;
+            left:-38px;
+            border-radius:50%;
+            background:currentColor;
+            opacity:.035;
+            pointer-events:none;
+        }
+        .page-home .why-card-icon {
+            display:grid;
+            place-items:center;
+            flex:0 0 54px;
+            width:54px;
+            height:54px;
+            color:#9f4fff;
+            background:rgba(107,50,180,.22);
+            border:1px solid rgba(153,76,239,.26);
+            border-radius:10px;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.045);
+        }
+        .page-home .why-card-icon svg {
+            width:29px;
+            height:29px;
+            fill:none;
+            stroke:currentColor;
+            stroke-width:1.8;
+            stroke-linecap:round;
+            stroke-linejoin:round;
+        }
+        .page-home .why-card-hd { font-size:17px; font-weight:900; letter-spacing:-.4px; }
+        .page-home .why-card > div { min-width:0; }
+        .page-home .why-card h3 {
+            margin:3px 0 8px;
+            color:#f4f6fb;
+            font-size:16px !important;
+            font-weight:800;
+            line-height:1.25;
+            white-space:normal;
+        }
+        .page-home .why-card p {
+            margin:0;
+            color:#96a1b5;
+            font-size:12px !important;
+            line-height:1.6;
+        }
+        .page-home .why-card-blue { color:#3491ff; }
+        .page-home .why-card-blue .why-card-icon { color:#3293ff; background:rgba(25,101,197,.22); border-color:rgba(48,144,255,.28); }
+        .page-home .why-card-green { color:#14c987; }
+        .page-home .why-card-green .why-card-icon { color:#17cd89; background:rgba(11,136,94,.22); border-color:rgba(22,205,137,.28); }
+        .page-home .why-card-orange { color:#f39a32; }
+        .page-home .why-card-orange .why-card-icon { color:#f5a23e; background:rgba(169,88,13,.25); border-color:rgba(245,154,50,.3); }
+
+        /* Supported-platform showcase */
+        .platform-showcase {
+            scroll-margin-top:66px;
+            padding:64px 0 72px;
+            background:
+                radial-gradient(circle at 50% 40%,rgba(26,60,124,.08),transparent 48%),
+                linear-gradient(180deg,#080d18 0%,#060b16 100%) !important;
+            border-top:1px solid rgba(255,255,255,.025);
+            border-bottom:1px solid rgba(86,105,143,.16);
+        }
+        .platform-showcase > .wrap { width:min(1160px,calc(100% - 36px)); }
+        .platform-showcase .section-head {
+            max-width:700px;
+            margin:0 auto 42px;
+            padding:0;
+        }
+        .platform-showcase .section-head h2 {
+            margin:0 0 7px;
+            color:#f7f8fc;
+            font-size:40px !important;
+            font-weight:800;
+            line-height:1.15;
+            letter-spacing:-.8px;
+        }
+        .platform-showcase .section-head p {
+            max-width:590px;
+            margin:0 auto;
+            color:#929eb4;
+            font-size:16px !important;
+            line-height:1.55;
+        }
+        .platform-showcase .platform-grid {
+            grid-template-columns:repeat(4,minmax(0,1fr));
+            gap:18px;
+        }
+        .platform-showcase .platform-card {
+            position:relative;
+            display:flex;
+            min-height:220px;
+            padding:24px 21px 21px !important;
+            justify-content:flex-start;
+            background:
+                radial-gradient(circle at 50% 24%,color-mix(in srgb,var(--platform-accent) 25%,transparent),transparent 42%),
+                linear-gradient(145deg,#101722,#0b111c) !important;
+            border:1px solid color-mix(in srgb,var(--platform-accent) 45%,#243146) !important;
+            border-radius:14px !important;
+            box-shadow:0 0 28px color-mix(in srgb,var(--platform-accent) 10%,transparent),inset 0 1px 0 rgba(255,255,255,.025);
+            transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+        }
+        .platform-showcase .platform-card::before { height:1px; opacity:.95; }
+        .platform-showcase .platform-card::after {
+            top:-42px;
+            left:50%;
+            width:105px;
+            height:105px;
+            transform:translateX(-50%);
+            opacity:.08;
+        }
+        .platform-showcase .platform-card:hover {
+            transform:translateY(-3px);
+            border-color:var(--platform-accent) !important;
+            box-shadow:0 12px 34px rgba(0,0,0,.3),0 0 30px color-mix(in srgb,var(--platform-accent) 17%,transparent);
+        }
+        .platform-showcase .platform-card-top {
+            display:flex;
+            width:100%;
+            min-height:64px;
+            justify-content:center;
+            align-items:flex-start;
+        }
+        .platform-showcase .platform-card .platform-icon {
+            width:58px;
+            height:58px;
+            margin:0;
+            border:1px solid color-mix(in srgb,var(--platform-accent) 60%,#fff 5%);
+            border-radius:11px;
+            background:color-mix(in srgb,var(--platform-accent) 82%,#0b1120) !important;
+            box-shadow:0 7px 20px color-mix(in srgb,var(--platform-accent) 38%,transparent),inset 0 1px 0 rgba(255,255,255,.2);
+        }
+        .platform-showcase .platform-card .platform-icon img { width:31px; height:31px; }
+        .platform-showcase .platform-arrow {
+            top:0;
+            right:0;
+            width:29px;
+            height:29px;
+            color:#c8d0df;
+            background:rgba(6,11,20,.62);
+            border-color:#3a4659;
+            font-size:13px;
+        }
+        .platform-showcase .platform-card-copy { width:100%; margin-top:14px; text-align:center; }
+        .platform-showcase .platform-card h3 {
+            margin:0 0 7px;
+            color:#f5f7fb;
+            font-size:21px !important;
+            font-weight:800;
+            line-height:1.2;
+            text-align:center;
+        }
+        .platform-showcase .platform-card p {
+            display:block !important;
+            width:auto;
+            max-width:210px;
+            max-height:none;
+            margin:0 auto;
+            overflow:visible;
+            color:#9aa5b8;
+            font-size:13px !important;
+            line-height:1.55;
+            text-align:center;
+            -webkit-line-clamp:unset;
+            line-clamp:unset;
+        }
+
+        /* Analyzer result dashboard */
+        .page-home .download-panel.has-result {
+            width:min(760px,calc(100% - 24px));
+            max-width:760px;
+            padding:9px;
+            background:
+                radial-gradient(circle at 88% 22%,rgba(91,43,221,.13),transparent 30%),
+                linear-gradient(145deg,rgba(9,13,35,.98),rgba(6,12,29,.98));
+            border:1px solid rgba(111,69,255,.48);
+            border-radius:12px;
+            box-shadow:0 0 34px rgba(83,42,214,.18),0 18px 50px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.045);
+        }
+        .page-home .download-panel.has-result .url-form { grid-template-columns:minmax(0,1fr) 130px; gap:7px; }
+        .page-home .download-panel.has-result .url-form input {
+            min-height:43px;
+            padding:10px 14px 10px 42px;
+            border-color:#5a43c5;
+            border-radius:6px;
+            background:#080d26;
+            box-shadow:inset 0 1px 8px rgba(0,0,0,.4),0 0 15px rgba(80,44,208,.1);
+            font-size:10px;
+        }
+        .page-home .download-panel.has-result .url-input-wrap > svg { left:14px; width:16px; height:16px; }
+        .page-home .download-panel.has-result .button {
+            min-height:43px;
+            border-radius:6px;
+            font-size:10px;
+            box-shadow:0 7px 20px rgba(104,37,230,.34),inset 0 1px 0 rgba(255,255,255,.25);
+        }
+        .page-home .download-panel.has-result .result {
+            margin-top:8px;
+            padding:0;
+            overflow:visible;
+            background:transparent;
+            border:0;
+            border-radius:0;
+            box-shadow:none;
+        }
+        .page-home .download-panel.has-result .result-layout {
+            display:grid;
+            grid-template-columns:minmax(150px,28%) minmax(0,1fr);
+            gap:8px;
+            align-items:stretch;
+        }
+        .page-home .download-panel.has-result .media-summary {
+            min-width:0;
+            padding:9px;
+            text-align:left;
+            background:linear-gradient(165deg,rgba(12,19,46,.98),rgba(8,14,32,.98));
+            border:1px solid #273255;
+            border-radius:6px;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+        }
+        .page-home .download-panel.has-result .media-thumb-wrap {
+            overflow:hidden;
+            border:1px solid rgba(81,69,177,.45);
+            border-radius:6px;
+            box-shadow:0 8px 22px rgba(0,0,0,.3);
+        }
+        .page-home .download-panel.has-result .media-thumb { aspect-ratio:1.46; border-radius:5px; }
+        .page-home .download-panel.has-result .media-play {
+            width:34px;
+            height:34px;
+            color:#131522;
+            font-size:13px;
+            box-shadow:0 6px 18px rgba(0,0,0,.32);
+        }
+        .page-home .download-panel.has-result .media-platform {
+            margin:9px 0 5px;
+            color:#6f8dff;
+            font-size:7px;
+            line-height:1.45;
+        }
+        .page-home .download-panel.has-result .media-title {
+            margin:0;
+            color:#f5f6fc;
+            font-size:11px !important;
+            font-weight:800;
+            line-height:1.35;
+        }
+        .page-home .download-panel.has-result .media-duration {
+            margin-top:8px;
+            padding:4px 6px;
+            color:#b9c7ff;
+            background:rgba(69,54,164,.18);
+            border:1px solid rgba(99,76,213,.35);
+            border-radius:4px;
+            font-size:7px;
+        }
+        .page-home .download-panel.has-result .format-list {
+            display:flex;
+            min-width:0;
+            flex-direction:column;
+            gap:8px;
+            background:transparent;
+        }
+        .page-home .download-panel.has-result .format-section,
+        .page-home .download-panel.has-result .format-section:nth-of-type(even) {
+            padding:0;
+            overflow:hidden;
+            background:linear-gradient(160deg,rgba(11,17,43,.98),rgba(7,13,31,.98));
+            border:1px solid #273255;
+            border-radius:6px;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.024);
+        }
+        .page-home .download-panel.has-result .format-section + .format-section { border-top:1px solid #273255; }
+        .page-home .download-panel.has-result .format-heading {
+            min-height:33px;
+            margin:0;
+            padding:7px 10px;
+            gap:7px;
+            color:#f4f6fc;
+            background:rgba(15,21,50,.62);
+            border-bottom:1px solid #303a60;
+            font-size:12px !important;
+            font-weight:800;
+        }
+        .page-home .download-panel.has-result .format-heading-mark {
+            width:19px;
+            height:19px;
+            color:#f1eaff;
+            background:linear-gradient(145deg,#7448e5,#4c2cac);
+            border-radius:4px;
+            font-size:8px;
+        }
+        .page-home .download-panel.has-result .video-formats .format-heading-mark { color:#edeaff; }
+        .page-home .download-panel.has-result .audio-formats .format-heading-mark { background:linear-gradient(145deg,#8158f0,#5232bb); }
+        .page-home .download-panel.has-result .format-row {
+            display:grid;
+            grid-template-columns:34px 90px minmax(55px,1fr) 82px;
+            min-height:32px;
+            padding:5px 10px;
+            align-items:center;
+            gap:7px;
+            background:transparent;
+            border-bottom:1px solid rgba(49,59,94,.72);
+        }
+        .page-home .download-panel.has-result .format-row:hover { background:rgba(79,56,164,.08); }
+        .page-home .download-panel.has-result .format-row:last-child { border-bottom:0; }
+        .page-home .download-panel.has-result .format-badge {
+            min-width:0;
+            padding:4px 4px;
+            color:#181109;
+            background:linear-gradient(135deg,#ffc650,#f2a925);
+            border-radius:3px;
+            font-size:7px;
+            line-height:1;
+        }
+        .page-home .download-panel.has-result .audio-formats .format-badge {
+            color:#eaf0ff;
+            background:linear-gradient(135deg,#3f72e5,#2852bd);
+        }
+        .page-home .download-panel.has-result .format-quality,
+        .page-home .download-panel.has-result .format-size {
+            color:#e9edf8;
+            font-size:8px;
+            font-weight:700;
+            line-height:1.2;
+        }
+        .page-home .download-panel.has-result .format-size { color:#aeb7cb; text-align:center; }
+        .page-home .download-panel.has-result .download-link {
+            width:auto;
+            min-width:82px;
+            min-height:23px;
+            margin:0;
+            padding:0 8px;
+            gap:5px;
+            color:#eee9ff;
+            background:linear-gradient(145deg,rgba(99,53,205,.72),rgba(49,30,111,.75));
+            border:1px solid #7654e8;
+            border-radius:4px;
+            font-size:7px;
+            font-weight:700;
+            box-shadow:0 0 12px rgba(109,68,225,.15),inset 0 1px 0 rgba(255,255,255,.1);
+        }
+        .page-home .download-panel.has-result .audio-formats .download-link {
+            background:linear-gradient(145deg,rgba(47,88,189,.76),rgba(29,47,111,.78));
+            border-color:#3969db;
+            box-shadow:0 0 12px rgba(52,98,219,.14),inset 0 1px 0 rgba(255,255,255,.08);
+        }
+        .page-home .download-panel.has-result .download-link:hover {
+            color:#fff;
+            background:linear-gradient(145deg,#8d58f2,#5a31c2);
+            border-color:#a17aff;
+        }
+        .page-home .download-panel.has-result .download-link svg,
+        .page-home .download-panel.has-result .download-link .download-icon { width:9px; height:9px; flex-basis:9px; }
+        .page-home .download-panel.has-result .download-link .download-label { font-size:7px; }
+        .page-home .download-panel.has-result .result-note {
+            display:flex;
+            min-height:23px;
+            margin:8px 0 0;
+            padding:5px 8px;
+            align-items:center;
+            gap:6px;
+            color:#8792ab;
+            background:rgba(9,17,37,.9);
+            border:1px solid #252f4c;
+            border-radius:4px;
+            font-size:7px !important;
+            line-height:1.35;
+        }
+        .page-home .download-panel.has-result .result-note svg {
+            width:11px;
+            height:11px;
+            flex:0 0 11px;
+            fill:none;
+            stroke:#8e78df;
+            stroke-width:1.8;
+            stroke-linecap:round;
+            stroke-linejoin:round;
+        }
+
+        @media (max-width:760px) {
+            .page-home .how-steps-section { padding:30px 0 34px; }
+            .page-home .how-steps-intro h2 { font-size:22px !important; }
+            .page-home .how-steps-grid {
+                grid-template-columns:1fr;
+                gap:12px;
+                max-width:340px;
+            }
+            .page-home .how-step-card { min-height:165px; padding:18px; }
+            .page-home .how-step-arrow { height:18px; transform:rotate(90deg); }
+            .page-home .why-choose-section { padding:28px 0 32px; }
+            .page-home .why-choose-grid { grid-template-columns:repeat(2,minmax(0,1fr)); max-width:520px; }
+            .page-home .why-card { min-height:150px; }
+            .platform-showcase > .wrap { width:min(100% - 28px,560px); }
+            .platform-showcase .platform-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+            .platform-showcase .platform-card { min-height:150px; }
+            .page-home .download-panel.has-result { width:100%; }
+            .page-home .download-panel.has-result .result-layout { grid-template-columns:1fr; }
+            .page-home .download-panel.has-result .media-summary {
+                display:grid;
+                grid-template-columns:110px minmax(0,1fr);
+                grid-template-rows:auto auto 1fr;
+                gap:0 12px;
+                border-right:1px solid #273255;
+                border-bottom:1px solid #273255;
+            }
+            .page-home .download-panel.has-result .media-thumb-wrap { grid-row:1 / 4; }
+            .page-home .download-panel.has-result .media-platform { margin-top:3px; }
+            .page-home .download-panel.has-result .format-row { grid-template-columns:32px 74px minmax(48px,1fr) 76px; padding:5px 7px; gap:5px; }
+            .page-home .download-panel.has-result .format-badge {
+                grid-column:1;
+                grid-row:1;
+                align-self:center;
+            }
+            .page-home .download-panel.has-result .format-quality {
+                grid-column:2;
+                grid-row:1;
+                justify-self:start;
+                text-align:left;
+            }
+            .page-home .download-panel.has-result .format-size {
+                grid-column:3;
+                grid-row:1;
+                min-width:0;
+                justify-self:center;
+                text-align:center;
+            }
+            .page-home .download-panel.has-result .download-link {
+                grid-column:4;
+                grid-row:1;
+                width:auto;
+                min-width:76px;
+                height:auto;
+                min-height:23px;
+                margin:0;
+                justify-self:end;
+                align-self:center;
+                font-size:7px;
+            }
+            .page-home .download-panel.has-result .download-link svg,
+            .page-home .download-panel.has-result .download-link .download-icon { width:9px; height:9px; flex-basis:9px; }
+            .page-home .download-panel.has-result .download-link .download-label { font-size:7px; }
+        }
+        @media (max-width:480px) {
+            .page-home .why-choose-intro h2 { font-size:21px !important; }
+            .page-home .why-choose-grid { grid-template-columns:1fr; max-width:338px; gap:9px; }
+            .page-home .why-card { min-height:0; padding:16px; }
+            .page-home .why-card h3 { white-space:normal; }
+            .platform-showcase { padding:28px 0 32px; }
+            .platform-showcase .section-head { margin-bottom:22px; }
+            .platform-showcase .section-head h2 { font-size:26px !important; }
+            .platform-showcase .section-head p { font-size:11px !important; }
+            .platform-showcase .platform-card { min-height:142px; padding:13px 10px 11px !important; }
+            .platform-showcase .platform-card h3 { font-size:14px !important; }
+            .platform-showcase .platform-card p { max-width:125px; font-size:9px !important; }
+            .page-home .download-panel.has-result {
+                width:min(100%,390px);
+                padding:8px;
+                border-radius:13px;
+                box-shadow:0 0 28px rgba(83,42,214,.22),0 15px 34px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.05);
+            }
+            .page-home .download-panel.has-result .url-form {
+                grid-template-columns:1fr;
+                gap:6px;
+            }
+            .page-home .download-panel.has-result .url-form input {
+                min-height:38px;
+                padding:8px 11px 8px 37px;
+                font-size:8px;
+            }
+            .page-home .download-panel.has-result .url-input-wrap > svg { left:12px; width:13px; height:13px; }
+            .page-home .download-panel.has-result .button {
+                min-height:34px;
+                font-size:9px;
+            }
+            .page-home .download-panel.has-result .button .button-arrow { display:none; }
+            .page-home .download-panel.has-result .button::before {
+                content:'✦';
+                margin-right:6px;
+                font-size:9px;
+            }
+            .page-home .download-panel.has-result .result { margin-top:7px; }
+            .page-home .download-panel.has-result .result-layout { gap:7px; }
+            .page-home .download-panel.has-result .media-summary {
+                grid-template-columns:104px minmax(0,1fr);
+                grid-template-rows:auto auto 1fr;
+                min-height:78px;
+                padding:7px;
+                column-gap:9px;
+                border-radius:6px;
+            }
+            .page-home .download-panel.has-result .media-thumb-wrap { align-self:center; }
+            .page-home .download-panel.has-result .media-thumb { aspect-ratio:1.55; }
+            .page-home .download-panel.has-result .media-play { width:27px; height:27px; font-size:10px; }
+            .page-home .download-panel.has-result .media-platform { margin:1px 0 4px; font-size:6px; }
+            .page-home .download-panel.has-result .media-title {
+                display:-webkit-box;
+                overflow:hidden;
+                -webkit-box-orient:vertical;
+                -webkit-line-clamp:2;
+                font-size:9px !important;
+                line-height:1.35;
+            }
+            .page-home .download-panel.has-result .media-duration { margin-top:5px; padding:3px 5px; font-size:6px; justify-self:start; }
+            .page-home .download-panel.has-result .format-list { gap:7px; }
+            .page-home .download-panel.has-result .format-heading {
+                min-height:29px;
+                padding:5px 7px;
+                font-size:10px !important;
+            }
+            .page-home .download-panel.has-result .format-heading-mark { width:17px; height:17px; font-size:7px; }
+            .page-home .download-panel.has-result .format-row {
+                grid-template-columns:29px 56px minmax(42px,1fr) 72px;
+                min-height:30px;
+                padding:4px 7px;
+                gap:4px;
+            }
+            .page-home .download-panel.has-result .format-badge { padding:4px 3px; font-size:6px; }
+            .page-home .download-panel.has-result .format-quality,
+            .page-home .download-panel.has-result .format-size { font-size:7px; }
+            .page-home .download-panel.has-result .download-link {
+                grid-column:4;
+                grid-row:1;
+                width:auto;
+                min-width:72px;
+                min-height:22px;
+                height:auto;
+                margin:0;
+                padding:0 5px;
+                justify-self:end;
+            }
+            .page-home .download-panel.has-result .result-note { margin-top:7px; min-height:20px; padding:4px 7px; font-size:6px !important; }
+        }
+        @media (max-width:360px) {
+            .page-home .download-panel.has-result .media-summary { grid-template-columns:92px minmax(0,1fr); }
+            .page-home .download-panel.has-result .format-row { grid-template-columns:27px 48px minmax(36px,1fr) 66px; padding-inline:5px; }
+            .page-home .download-panel.has-result .download-link { min-width:66px; }
+        }
     </style>
 
+    <link rel="stylesheet" href="{{ asset('css/result-dashboard.css') }}">
     @include('partials.adsense-head')
 </head>
-<body>
+<body class="page-{{ $page }}">
     @include('partials.navbar')
 
     @if ($page === 'home')
         <main>
             <div class="hero">
+                <span class="hero-orbit hero-orbit-left" aria-hidden="true"></span>
+                <span class="hero-orbit hero-orbit-right" aria-hidden="true"></span>
                 <div class="wrap hero-center">
-                        <span class="eyebrow">Browser-based public-link tool</span>
+                        <span class="eyebrow">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 2 5 13.1h6.2L10.8 22 19 10.9h-6.2L13.2 2Z"/></svg>
+                            Browser-based · No software
+                        </span>
                         @php 
                             $heroTitle = !empty($homeSettings->hero_heading) ? $homeSettings->hero_heading : ($siteSettings['hero_title'] ?? 'Analyze Public Media Links');
                             $lastSpace = strrpos($heroTitle, ' ');
@@ -1310,19 +2392,21 @@
                                 }
                             }
                         @endphp
-                        <h1>{{ $titleFirst }} @if($titleLast)<span>{{ $titleLast }}</span>@endif</h1>
+                        <h1>Download &amp; Preview<br>Media Links <span>Instantly</span></h1>
                         <div class="hero-copy">
-                            {!! $parsedDesc !!}<br>
-                            <span style="display: inline-block; margin-top: 6px;">Browser-based tool for supported public links</span><br>
-                            <span>Available formats and quality depend on the source</span>
+                            Preview and save video, audio, and other media from public links.<br>
+                            Fast, secure, and works on any device.
                         </div>
                         <div class="download-panel {{ $result ? 'has-result' : '' }}">
                             <form class="url-form" method="POST" action="{{ route('analyze') }}" id="analyze-form">
                                 @csrf
-                                <input id="video-url-input" name="video_url" type="url" value="{{ old('video_url') }}" placeholder="Paste a video URL here" aria-label="Video URL" required>
+                                <span class="url-input-wrap">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.6 13.4a4 4 0 0 0 5.7 0l3.1-3.1a4 4 0 0 0-5.7-5.7L12 6.3"/><path d="M13.4 10.6a4 4 0 0 0-5.7 0l-3.1 3.1a4 4 0 0 0 5.7 5.7l1.7-1.7"/></svg>
+                                    <input id="video-url-input" name="video_url" type="url" value="{{ old('video_url') }}" placeholder="Paste a video URL here" aria-label="Video URL" required>
+                                </span>
                                 <button id="analyze-btn" class="button" type="submit">
-                                    <svg class="download-icon" style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
-                                    <span class="download-label">{{ !empty($homeSettings->hero_button_text) ? $homeSettings->hero_button_text : 'Analyze' }}</span>
+                                    <span class="download-label">{{ $result ? 'Analyze' : 'Analyze Link' }}</span>
+                                    <svg class="button-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
                                 </button>
                             </form>
                             @error('video_url')<div class="error" id="error-container">{{ $message }}</div>@else<div id="error-container" class="error" style="display:none;"></div>@enderror
@@ -1334,21 +2418,114 @@
                                 @endif
                             </div>
                         </div>
+                        <p class="platform-prompt">Try a sample link or choose a platform</p>
                         <div class="platform-strip" aria-label="Popular supported platforms">
                             @foreach (array_slice($platforms, 0, 6) as $platform)
                                 <a href="{{ route('platforms.show', $platform['slug']) }}" class="platform-pill"><span class="platform-dot" style="background:{{ $platform['accent'] }}"><img src="https://cdn.simpleicons.org/{{ $platform['icon'] }}/ffffff" alt="" loading="lazy"></span>{{ $platform['name'] }}</a>
                             @endforeach
                         </div>
+                        <div class="hero-trust" aria-label="Service benefits">
+                            <div class="hero-trust-item">
+                                <span class="hero-trust-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+                                <span><strong>No Signup</strong><small>100% free to use</small></span>
+                            </div>
+                            <div class="hero-trust-item hero-trust-mobile-only">
+                                <span class="hero-trust-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 18h8M10 22h4M12 2v3M4.9 4.9 7 7M19.1 4.9 17 7"/><path d="M7.5 14.5a6 6 0 1 1 9 0c-1 1-1.5 2-1.5 3h-6c0-1-.5-2-1.5-3Z"/></svg></span>
+                                <span><strong>No Software</strong><small>Nothing to install</small></span>
+                            </div>
+                            <div class="hero-trust-item">
+                                <span class="hero-trust-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z"/></svg></span>
+                                <span><strong>Fast Analysis</strong><small>Get results in seconds</small></span>
+                            </div>
+                            <div class="hero-trust-item">
+                                <span class="hero-trust-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+                                <span><strong>Privacy First</strong><small>We don't store your data</small></span>
+                            </div>
+                        </div>
                 </div>
             </div>
-            <div class="trust-bar">
-                <div class="wrap trust-grid">
-                    <div class="trust-item"><strong>Fast link analysis</strong><span>Get available formats in seconds</span></div>
-                    <div class="trust-item"><strong>Clear format details</strong><span>Review format and quality before continuing</span></div>
-                    <div class="trust-item"><strong>Source-dependent quality</strong><span>Availability varies by the original source</span></div>
+            <section class="how-steps-section" id="how-it-works">
+                <div class="wrap">
+                    <div class="how-steps-intro">
+                        <h2>How It Works</h2>
+                        <p>Analyze any public media link in 3 simple steps</p>
+                    </div>
+                    <div class="how-steps-grid">
+                        <article class="how-step-card">
+                            <span class="how-step-number">01</span>
+                            <span class="how-step-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="M10.6 13.4a4 4 0 0 0 5.7 0l3.1-3.1a4 4 0 0 0-5.7-5.7L12 6.3"/><path d="M13.4 10.6a4 4 0 0 0-5.7 0l-3.1 3.1a4 4 0 0 0 5.7 5.7l1.7-1.7"/></svg>
+                            </span>
+                            <h3>Paste Link</h3>
+                            <p>Copy and paste the public media link into the input box above.</p>
+                        </article>
+                        <span class="how-step-arrow" aria-hidden="true"><svg viewBox="0 0 28 16"><path d="M1 8h24M20 3l5 5-5 5"/></svg></span>
+                        <article class="how-step-card">
+                            <span class="how-step-number">02</span>
+                            <span class="how-step-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+                            </span>
+                            <h3>Analyze Link</h3>
+                            <p>We analyze the link and fetch available formats and quality options.</p>
+                        </article>
+                        <span class="how-step-arrow" aria-hidden="true"><svg viewBox="0 0 28 16"><path d="M1 8h24M20 3l5 5-5 5"/></svg></span>
+                        <article class="how-step-card">
+                            <span class="how-step-number">03</span>
+                            <span class="how-step-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                            </span>
+                            <h3>Preview &amp; Download</h3>
+                            <p>Preview the media and download in your preferred format and quality.</p>
+                        </article>
+                    </div>
                 </div>
-            </div>
-            <section>
+            </section>
+            <section class="why-choose-section" id="why-choose" aria-labelledby="why-choose-title">
+                <div class="wrap">
+                    <div class="why-choose-intro">
+                        <h2 id="why-choose-title">Why Choose Solution Hub?</h2>
+                        <p>Built for speed, quality and a seamless experience.</p>
+                    </div>
+                    <div class="why-choose-grid">
+                        <article class="why-card why-card-purple">
+                            <span class="why-card-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z"/></svg>
+                            </span>
+                            <div>
+                                <h3>Ultra-Fast Processing</h3>
+                                <p>Our optimized servers analyze links and return results as quickly as network conditions allow.</p>
+                            </div>
+                        </article>
+                        <article class="why-card why-card-blue">
+                            <span class="why-card-icon why-card-hd" aria-hidden="true">HD</span>
+                            <div>
+                                <h3>High Quality</h3>
+                                <p>Get the best available resolutions and audio formats from the source whenever possible.</p>
+                            </div>
+                        </article>
+                        <article class="why-card why-card-green">
+                            <span class="why-card-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+                            </span>
+                            <div>
+                                <h3>Safe &amp; Private</h3>
+                                <p>We don't require sign-up. All connections are secure and your data stays completely private.</p>
+                            </div>
+                        </article>
+                        <article class="why-card why-card-orange">
+                            <span class="why-card-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+                            </span>
+                            <div>
+                                <h3>Multi-Platform Support</h3>
+                                <p>Works with popular platforms like YouTube, Facebook, Instagram, TikTok, X (Twitter) and more.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            {{-- Legacy feature/step sections replaced by the workflow above.
+            <section class="legacy-how-section">
                 <div class="wrap">
                     <div class="section-head"><h2>How Solution Hub works</h2><p>Analyze supported public links and review the formats reported by their source. Only save media you own or are authorized to use.</p></div>
 
@@ -1456,6 +2633,7 @@
                     </div>
                 </div>
             </section>
+            --}}
             @include('partials.platforms')
             
             @if(isset($homeSettings) && (!empty($homeSettings->sites_heading) || !empty($homeSettings->sites_description)))
@@ -1497,7 +2675,7 @@
             </section>
             @endif
 
-            <section class="home-faq-section">
+            <section class="home-faq-section" id="faq">
                 <div class="wrap">
                     <div class="section-head"><h2>{{ $homeSettings->faq_h1 ?? 'Frequently asked questions' }}</h2><p>{{ $homeSettings->faq_description ?? 'Quick answers about using Solution Hub.' }}</p></div>
                     <div class="faq">

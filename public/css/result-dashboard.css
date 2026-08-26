@@ -1,0 +1,291 @@
+/* Shared analyzer result dashboard — home and every platform page */
+.download-panel .url-input-wrap { position:relative; display:block; min-width:0; }
+.download-panel .url-input-wrap > svg {
+    position:absolute;
+    left:20px;
+    top:50%;
+    z-index:2;
+    width:22px;
+    height:22px;
+    transform:translateY(-50%);
+    fill:none;
+    stroke:#8b96b2;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    pointer-events:none;
+}
+.download-panel .url-input-wrap input { width:100%; box-sizing:border-box; }
+.download-panel:not(.has-result) .url-input-wrap input { padding-left:58px; }
+.download-panel-wrap .download-panel:not(.has-result) {
+    width:min(1040px,calc(100% - 24px));
+    max-width:1040px;
+    box-sizing:border-box;
+}
+.download-panel .button {
+    color:#fff !important;
+    background:linear-gradient(135deg,#8f38f6 0%,#5c1ee0 100%) !important;
+    border:1px solid rgba(176,112,255,.65) !important;
+}
+.download-panel .button-arrow { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.download-panel.has-result {
+    width:min(1180px,calc(100% - 24px)) !important;
+    max-width:1180px !important;
+    padding:13px !important;
+    background:linear-gradient(155deg,rgba(10,16,42,.98),rgba(7,12,31,.98)) !important;
+    border:1px solid rgba(112,70,255,.58) !important;
+    border-radius:16px !important;
+    box-shadow:0 0 38px rgba(83,42,214,.2),0 22px 54px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.055) !important;
+    box-sizing:border-box;
+}
+.download-panel.has-result .url-form {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) 195px !important;
+    gap:11px !important;
+}
+.download-panel.has-result .url-form input {
+    min-height:64px !important;
+    padding:16px 20px 16px 58px !important;
+    color:#f1f4ff !important;
+    background:#0a1029 !important;
+    border:1px solid #6049d1 !important;
+    border-radius:10px !important;
+    font-size:15px !important;
+}
+.download-panel.has-result .url-input-wrap > svg { left:20px !important; width:22px !important; height:22px !important; }
+.download-panel.has-result .button {
+    width:auto !important;
+    min-height:64px !important;
+    border-radius:10px !important;
+    color:#fff !important;
+    font-size:15px !important;
+}
+.download-panel.has-result .result {
+    margin-top:12px !important;
+    padding:0 !important;
+    overflow:visible !important;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+}
+.download-panel.has-result .result-layout {
+    display:grid !important;
+    grid-template-columns:310px minmax(0,1fr) !important;
+    gap:12px !important;
+    align-items:stretch !important;
+}
+.download-panel.has-result .media-summary {
+    min-width:0 !important;
+    padding:14px !important;
+    text-align:left !important;
+    background:linear-gradient(165deg,#0d1535,#091129) !important;
+    border:1px solid #303b68 !important;
+    border-radius:10px !important;
+}
+.download-panel.has-result .media-thumb-wrap {
+    overflow:hidden !important;
+    border:1px solid rgba(88,74,190,.52) !important;
+    border-radius:9px !important;
+}
+.download-panel.has-result .media-thumb { aspect-ratio:1.48 !important; border-radius:8px !important; }
+.download-panel.has-result .media-play { width:52px !important; height:52px !important; font-size:18px !important; }
+.download-panel.has-result .media-platform {
+    margin:14px 0 7px !important;
+    color:#7895ff !important;
+    font-size:10px !important;
+    line-height:1.4 !important;
+}
+.download-panel.has-result .media-title {
+    margin:0 !important;
+    color:#f6f7fd !important;
+    font-size:16px !important;
+    font-weight:800 !important;
+    line-height:1.42 !important;
+}
+.download-panel.has-result .media-duration {
+    margin-top:11px !important;
+    padding:6px 9px !important;
+    color:#c0cbff !important;
+    background:rgba(75,58,174,.2) !important;
+    border:1px solid rgba(111,84,235,.42) !important;
+    border-radius:6px !important;
+    font-size:10px !important;
+}
+.download-panel.has-result .format-list {
+    display:flex !important;
+    min-width:0 !important;
+    flex-direction:column !important;
+    gap:12px !important;
+    background:transparent !important;
+}
+.download-panel.has-result .format-section,
+.download-panel.has-result .format-section:nth-of-type(even) {
+    padding:0 !important;
+    overflow:hidden !important;
+    background:linear-gradient(160deg,#0c1332,#08102a) !important;
+    border:1px solid #303b68 !important;
+    border-radius:10px !important;
+}
+.download-panel.has-result .format-section + .format-section { border-top:1px solid #303b68 !important; }
+.download-panel.has-result .format-heading {
+    min-height:49px !important;
+    margin:0 !important;
+    padding:10px 15px !important;
+    gap:10px !important;
+    color:#f5f6fc !important;
+    background:rgba(17,24,58,.75) !important;
+    border-bottom:1px solid #34416e !important;
+    font-size:17px !important;
+    font-weight:800 !important;
+}
+.download-panel.has-result .format-heading-mark {
+    width:27px !important;
+    height:27px !important;
+    color:#f3edff !important;
+    background:linear-gradient(145deg,#7950e9,#5030b6) !important;
+    border-radius:6px !important;
+    font-size:11px !important;
+}
+.download-panel.has-result .format-row {
+    display:grid !important;
+    grid-template-columns:48px 110px minmax(90px,1fr) 124px !important;
+    min-height:50px !important;
+    padding:7px 15px !important;
+    align-items:center !important;
+    gap:10px !important;
+    background:transparent !important;
+    border-bottom:1px solid rgba(55,66,108,.78) !important;
+}
+.download-panel.has-result .format-row:last-child { border-bottom:0 !important; }
+.download-panel.has-result .format-badge {
+    grid-column:1 !important;
+    grid-row:1 !important;
+    min-width:0 !important;
+    padding:6px 7px !important;
+    color:#1c1307 !important;
+    background:linear-gradient(135deg,#ffc650,#f2a925) !important;
+    border-radius:5px !important;
+    font-size:10px !important;
+}
+.download-panel.has-result .audio-formats .format-badge {
+    color:#eef3ff !important;
+    background:linear-gradient(135deg,#4679e7,#2854c1) !important;
+}
+.download-panel.has-result .format-quality,
+.download-panel.has-result .format-size {
+    grid-row:1 !important;
+    color:#edf1fb !important;
+    font-size:11px !important;
+    font-weight:700 !important;
+}
+.download-panel.has-result .format-quality { grid-column:2 !important; text-align:left !important; justify-self:start !important; }
+.download-panel.has-result .format-size { grid-column:3 !important; color:#aeb8ce !important; text-align:center !important; justify-self:center !important; }
+.download-panel.has-result .download-link {
+    grid-column:4 !important;
+    grid-row:1 !important;
+    width:auto !important;
+    min-width:124px !important;
+    min-height:34px !important;
+    height:auto !important;
+    margin:0 !important;
+    padding:0 12px !important;
+    justify-self:end !important;
+    align-self:center !important;
+    gap:7px !important;
+    color:#f0ebff !important;
+    background:linear-gradient(145deg,rgba(101,55,210,.8),rgba(51,31,117,.84)) !important;
+    border:1px solid #7958eb !important;
+    border-radius:6px !important;
+    font-size:10px !important;
+}
+.download-panel.has-result .audio-formats .download-link {
+    background:linear-gradient(145deg,rgba(48,91,195,.84),rgba(28,49,116,.88)) !important;
+    border-color:#4170df !important;
+}
+.download-panel.has-result .download-link svg,
+.download-panel.has-result .download-link .download-icon { width:13px !important; height:13px !important; flex:0 0 13px !important; }
+.download-panel.has-result .download-link .download-label { font-size:10px !important; }
+.download-panel.has-result .result-note {
+    display:flex !important;
+    min-height:34px !important;
+    margin:12px 0 0 !important;
+    padding:7px 10px !important;
+    align-items:center !important;
+    gap:8px !important;
+    color:#8e99b1 !important;
+    background:#0a1229 !important;
+    border:1px solid #2b365e !important;
+    border-radius:7px !important;
+    font-size:9px !important;
+}
+.download-panel.has-result .result-note svg { width:14px !important; height:14px !important; flex:0 0 14px !important; fill:none; stroke:#957fe8; }
+
+@media (max-width:760px) {
+    .download-panel.has-result { width:min(100% - 20px,430px) !important; padding:8px !important; border-radius:13px !important; }
+    .download-panel.has-result .url-form { grid-template-columns:1fr !important; gap:6px !important; }
+    .download-panel.has-result .url-form input { min-height:39px !important; padding:8px 11px 8px 38px !important; font-size:8px !important; }
+    .download-panel.has-result .url-input-wrap > svg { left:12px !important; width:13px !important; height:13px !important; }
+    .download-panel.has-result .button { width:100% !important; min-height:34px !important; font-size:9px !important; }
+    .download-panel.has-result .result { margin-top:7px !important; }
+    .download-panel.has-result .result-layout { grid-template-columns:1fr !important; gap:7px !important; }
+    .download-panel.has-result .media-summary {
+        display:grid !important;
+        grid-template-columns:112px minmax(0,1fr) !important;
+        grid-template-rows:auto auto 1fr !important;
+        min-height:82px !important;
+        padding:7px !important;
+        gap:0 9px !important;
+    }
+    .download-panel.has-result .media-thumb-wrap { grid-row:1 / 4 !important; align-self:center !important; }
+    .download-panel.has-result .media-thumb { aspect-ratio:1.55 !important; }
+    .download-panel.has-result .media-play { width:28px !important; height:28px !important; font-size:10px !important; }
+    .download-panel.has-result .media-platform { margin:1px 0 4px !important; font-size:6px !important; }
+    .download-panel.has-result .media-title {
+        display:-webkit-box !important;
+        overflow:hidden !important;
+        -webkit-box-orient:vertical !important;
+        -webkit-line-clamp:2 !important;
+        font-size:9px !important;
+        line-height:1.35 !important;
+    }
+    .download-panel.has-result .media-duration { margin-top:5px !important; padding:3px 5px !important; font-size:6px !important; justify-self:start !important; }
+    .download-panel.has-result .format-list { gap:7px !important; }
+    .download-panel.has-result .format-heading { min-height:29px !important; padding:5px 7px !important; font-size:10px !important; }
+    .download-panel.has-result .format-heading-mark { width:17px !important; height:17px !important; font-size:7px !important; }
+    .download-panel.has-result .format-row {
+        grid-template-columns:30px 57px minmax(44px,1fr) 74px !important;
+        min-height:30px !important;
+        padding:4px 7px !important;
+        gap:4px !important;
+    }
+    .download-panel.has-result .format-badge { padding:4px 3px !important; font-size:6px !important; }
+    .download-panel.has-result .format-quality,
+    .download-panel.has-result .format-size { font-size:7px !important; }
+    .download-panel.has-result .download-link {
+        grid-column:4 !important;
+        grid-row:1 !important;
+        width:auto !important;
+        min-width:74px !important;
+        min-height:22px !important;
+        height:auto !important;
+        margin:0 !important;
+        padding:0 5px !important;
+        justify-self:end !important;
+        font-size:7px !important;
+    }
+    .download-panel.has-result .download-link svg,
+    .download-panel.has-result .download-link .download-icon { width:9px !important; height:9px !important; flex-basis:9px !important; }
+    .download-panel.has-result .download-link .download-label { font-size:7px !important; }
+    .download-panel.has-result .result-note { min-height:21px !important; margin-top:7px !important; padding:4px 7px !important; font-size:6px !important; }
+}
+
+@media (min-width:761px) {
+    .download-panel-wrap .download-panel:not(.has-result) .url-form { grid-template-columns:minmax(0,1fr) 180px; gap:10px; }
+}
+
+@media (max-width:360px) {
+    .download-panel.has-result .media-summary { grid-template-columns:94px minmax(0,1fr) !important; }
+    .download-panel.has-result .format-row { grid-template-columns:27px 48px minmax(36px,1fr) 66px !important; padding-inline:5px !important; }
+    .download-panel.has-result .download-link { min-width:66px !important; }
+}
