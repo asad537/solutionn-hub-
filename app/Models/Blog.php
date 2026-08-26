@@ -80,7 +80,7 @@ class Blog extends Model
                     $caption = $block['data']['caption'] ?? '';
                     $stretched = ($block['data']['stretched'] ?? false) ? 'width:100%;' : 'max-width:100%; height:auto;';
                     $html .= "<figure style='margin:2.5rem auto; text-align:center;'>
-                        <img src='{$url}' alt='{$caption}' style='{$stretched} border-radius:16px; box-shadow:0 20px 40px rgba(0,0,0,0.08);'>
+                        <img src='{$url}' alt='{$caption}' title='{$caption}' style='{$stretched} border-radius:16px; box-shadow:0 20px 40px rgba(0,0,0,0.08);'>
                         <figcaption style='margin-top:1rem; color:#64748B; font-size:0.85rem; font-style:italic;'>{$caption}</figcaption>
                     </figure>";
                     break;
@@ -131,7 +131,7 @@ class Blog extends Model
                     $html .= "
                         <div class='render-two-column' style='display:flex; gap:40px; align-items:center; margin:3rem 0; {$reverse}'>
                             <div style='flex:1; font-size:1rem; color:#334155; line-height:1.8;'>{$text}</div>
-                            <div style='flex:1;'><img src='{$imgUrl}' alt='{$imgAlt}' style='width:100%; border-radius:20px; box-shadow:0 15px 35px rgba(0,0,0,0.07);'></div>
+                            <div style='flex:1;'><img src='{$imgUrl}' alt='{$imgAlt}' title='{$imgAlt}' style='width:100%; border-radius:20px; box-shadow:0 15px 35px rgba(0,0,0,0.07);'></div>
                         </div>
                     ";
                     break;

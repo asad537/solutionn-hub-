@@ -2,7 +2,7 @@
 <header class="topbar solution-topbar">
     <nav class="wrap nav solution-nav">
         <a class="brand" href="{{ route('home') }}" aria-label="Solution Hub home">
-            <img src="/images/logo-hafiz.svg" alt="Solution Hub" width="190" height="60" style="height:75px;width:auto;object-fit:contain;">
+            <img src="/images/logo-hafiz.svg" alt="Solution Hub logo" title="Solution Hub Logo" width="190" height="60" style="height:75px;width:auto;object-fit:contain;">
         </a>
         <button class="mobile-lang-button" id="mobileLangButton" type="button" aria-label="Choose language" aria-expanded="false">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
@@ -70,7 +70,7 @@
                                 $mpIconHtml = '<i class="'.$mp->icon.'"></i>';
                             } else {
                                 $iconSlug = (!empty($mp->icon) && strpos($mp->icon, 'fa-') === false) ? strtolower($mp->icon) : $icoName;
-                                $mpIconHtml = '<img src="https://cdn.simpleicons.org/'.$iconSlug.'/'.$iconColor.'" alt="" width="18" height="18" style="display:block;">';
+                                $mpIconHtml = '<img src="https://cdn.simpleicons.org/'.$iconSlug.'/'.$iconColor.'" alt="'.e($mp->name).' icon" title="'.e($mp->name).' Icon" width="18" height="18" style="display:block;">';
                             }
                             $hasKids = $mp->children->isNotEmpty();
                         @endphp
@@ -97,7 +97,7 @@
                                         $cIconHtml = '<i class="'.$cIconSource.'"></i>';
                                     } else {
                                         $cIconSlug = (!empty($cIconSource) && strpos($cIconSource, 'fa-') === false) ? strtolower($cIconSource) : $cIcoNameFallback;
-                                        $cIconHtml = '<img src="https://cdn.simpleicons.org/'.$cIconSlug.'/'.$cIconColor.'" alt="" width="14" height="14" style="display:block;">';
+                                        $cIconHtml = '<img src="https://cdn.simpleicons.org/'.$cIconSlug.'/'.$cIconColor.'" alt="'.e($child->name).' icon" title="'.e($child->name).' Icon" width="14" height="14" style="display:block;">';
                                     }
                                 @endphp
                                 <a href="{{ route('platforms.show', $child->slug) }}" class="mega-item mega-child-item">
@@ -318,9 +318,25 @@
                 }
                 document.documentElement.style.setProperty('margin-top','0','important');
             }
-            new MutationObserver(hideGoogleChrome).observe(document.documentElement, {childList:true, subtree:true, attributes:true});
+
+            function addGoogleTranslateImageMetadata() {
+                document.querySelectorAll('img[src*="24px.svg"]').forEach(function(image) {
+                    if (image.getAttribute('alt') !== 'Google Translate icon') image.setAttribute('alt', 'Google Translate icon');
+                    if (image.getAttribute('title') !== 'Google Translate Icon') image.setAttribute('title', 'Google Translate Icon');
+                });
+                document.querySelectorAll('img[src*="googlelogo_color_42x16dp.png"]').forEach(function(image) {
+                    if (image.getAttribute('alt') !== 'Google Translate logo') image.setAttribute('alt', 'Google Translate logo');
+                    if (image.getAttribute('title') !== 'Google Translate Logo') image.setAttribute('title', 'Google Translate Logo');
+                });
+            }
+
+            new MutationObserver(function() {
+                hideGoogleChrome();
+                addGoogleTranslateImageMetadata();
+            }).observe(document.documentElement, {childList:true, subtree:true, attributes:true});
             setInterval(hideGoogleChrome, 500);
             hideGoogleChrome();
+            addGoogleTranslateImageMetadata();
         })();
     });
 </script>

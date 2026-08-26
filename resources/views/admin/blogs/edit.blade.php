@@ -130,7 +130,7 @@
                     <input type="file" name="featured_image" accept="image/*">
                     @if($blog->featured_image)
                     <div class="current-img">
-                        <img src="{{ $blog->featured_image }}" alt="">
+                        <img src="{{ $blog->featured_image }}" alt="{{ $blog->title }}" title="{{ $blog->title }}">
                     </div>
                     @endif
                 </div>

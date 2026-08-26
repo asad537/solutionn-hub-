@@ -703,7 +703,7 @@
 
         <p style="margin-top: 0.8rem; text-align: center; font-size: 0.85rem; line-height: 1.45;">
             <a href="" class="tutorial-link">
-                <img src="/images/play-circle.svg" alt="Play" style="width: 20px; height: 20px;">
+                <img src="/images/play-circle.svg" alt="Play tutorial icon" title="Play Tutorial" style="width: 20px; height: 20px;">
                 How to download?
                 <!-- <span>Watch the Tutorial</span> -->
             </a>
@@ -718,7 +718,7 @@
 
         <div class="results-wrapper" id="results" style="margin-top: 2rem;">
             <aside class="sidebar">
-                <div class="thumb-box"><img id="thumb" src="" alt="thumbnail"></div>
+                <div class="thumb-box"><img id="thumb" src="" alt="Video thumbnail" title="Video Thumbnail"></div>
                 <h2 class="video-title" id="title">Video Title</h2>
                 <div class="duration-badge">
                     <i class="far fa-clock"></i> <span id="duration">00:00</span>
@@ -969,7 +969,7 @@
             const thumbBox = document.querySelector('.thumb-box');
             if (thumbBox) {
                 // Reset thumb box
-                thumbBox.innerHTML = `<img id="thumb" src="" alt="thumbnail" style="width:100%;height:100%;object-fit:cover;">`;
+                thumbBox.innerHTML = `<img id="thumb" src="" alt="Video thumbnail" title="Video Thumbnail" style="width:100%;height:100%;object-fit:cover;">`;
                 thumbBox.classList.remove('playing');
             }
 

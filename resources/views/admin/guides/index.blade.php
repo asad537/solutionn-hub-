@@ -74,7 +74,7 @@
                     <td>
                         <div class="guide-info">
                             <div class="guide-img-wrap">
-                                <img src="{{ $guide->featured_image ?: 'https://via.placeholder.com/300x200' }}" class="guide-img" alt="">
+                                <img src="{{ $guide->featured_image ?: 'https://via.placeholder.com/300x200' }}" class="guide-img" alt="{{ $guide->title }}" title="{{ $guide->title }}">
                             </div>
                             <div>
                                 <div class="guide-title">{{ $guide->title }}</div>

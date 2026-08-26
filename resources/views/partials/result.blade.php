@@ -18,7 +18,7 @@
     <div class="result-layout">
         <aside class="media-summary">
             @if(!empty($result['thumbnail']))
-                <div class="media-thumb-wrap"><img class="media-thumb" src="{{ $result['thumbnail'] }}" alt="{{ $result['title'] ?? 'Video thumbnail' }}"><span class="media-play">▶</span></div>
+                <div class="media-thumb-wrap"><img class="media-thumb" src="{{ $result['thumbnail'] }}" alt="{{ $result['title'] ?? 'Video thumbnail' }}" title="{{ $result['title'] ?? 'Video Thumbnail' }}"><span class="media-play">▶</span></div>
             @else
                 <div class="media-thumb-wrap"><div class="media-thumb"></div><span class="media-play">▶</span></div>
             @endif

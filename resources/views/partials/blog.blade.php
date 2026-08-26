@@ -11,7 +11,7 @@
             <div class="editorial-blog-grid">
                 <article class="featured-post">
                     <a class="featured-post-image" href="{{ route('blog.show', $featured['slug']) }}">
-                        <img src="{{ asset($featured['image']) }}" alt="{{ $featured['image_alt'] ?? $featured['title'] }}" loading="lazy">
+                        <img src="{{ asset($featured['image']) }}" alt="{{ $featured['image_alt'] ?? $featured['title'] }}" title="{{ $featured['title'] }}" loading="lazy">
                     </a>
                     <div class="editorial-meta"><span>HDVideo Team</span><time>{{ $featured['published'] }}</time></div>
                     <h3><a href="{{ route('blog.show', $featured['slug']) }}">{{ $featured['title'] }}</a></h3>
@@ -20,7 +20,7 @@
                 <div class="side-posts">
                     @foreach($sidePosts as $post)
                         <article class="side-post">
-                            <a class="side-post-image" href="{{ route('blog.show', $post['slug']) }}"><img src="{{ asset($post['image']) }}" alt="{{ $post['image_alt'] ?? $post['title'] }}" loading="lazy"></a>
+                            <a class="side-post-image" href="{{ route('blog.show', $post['slug']) }}"><img src="{{ asset($post['image']) }}" alt="{{ $post['image_alt'] ?? $post['title'] }}" title="{{ $post['title'] }}" loading="lazy"></a>
                             <div class="side-post-copy">
                                 <div class="editorial-meta"><span>HDVideo Team</span><time>{{ $post['published'] }}</time></div>
                                 <h3><a href="{{ route('blog.show', $post['slug']) }}">{{ $post['title'] }}</a></h3>
@@ -55,7 +55,7 @@
                 <!-- Large Featured Post -->
                 <article class="dark-post-card">
                     <a class="dark-post-cover" href="{{ route('blog.show', $featured['slug']) }}">
-                        <img src="{{ asset($featured['image']) }}" alt="{{ $featured['title'] }}" loading="lazy">
+                        <img src="{{ asset($featured['image']) }}" alt="{{ $featured['image_alt'] ?? $featured['title'] }}" title="{{ $featured['title'] }}" loading="lazy">
                     </a>
                     <div class="dark-post-meta">
                         <span>{{ $featured['author'] ?? 'HDVideo Team' }}</span>
@@ -70,7 +70,7 @@
                     @foreach($topSidePosts as $post)
                         <article class="dark-post-card">
                             <a class="dark-post-cover" href="{{ route('blog.show', $post['slug']) }}">
-                                <img src="{{ asset($post['image']) }}" alt="{{ $post['title'] }}" loading="lazy">
+                                <img src="{{ asset($post['image']) }}" alt="{{ $post['image_alt'] ?? $post['title'] }}" title="{{ $post['title'] }}" loading="lazy">
                             </a>
                             <div class="dark-post-meta">
                                 <span>{{ $post['author'] ?? 'HDVideo Team' }}</span>
@@ -89,7 +89,7 @@
                     @foreach($remainingPosts as $post)
                         <article class="dark-post-card">
                             <a class="dark-post-cover" href="{{ route('blog.show', $post['slug']) }}">
-                                <img src="{{ asset($post['image']) }}" alt="{{ $post['title'] }}" loading="lazy">
+                                <img src="{{ asset($post['image']) }}" alt="{{ $post['image_alt'] ?? $post['title'] }}" title="{{ $post['title'] }}" loading="lazy">
                             </a>
                             <div class="dark-post-meta">
                                 <span>{{ $post['author'] ?? 'HDVideo Team' }}</span>

@@ -42,7 +42,7 @@
 
         <!-- Logo (CENTER on mobile, LEFT on desktop) -->
         <a href="/" class="logo">
-            <img src="/images/logo-hafiz.svg" alt="Solution Hub">
+            <img src="/images/logo-hafiz.svg" alt="Solution Hub logo" title="Solution Hub Logo">
         </a>
 
         <!-- Desktop Nav -->
@@ -161,7 +161,7 @@
     <div class="mobile-nav" id="mobile-nav" style="display:none;">
         <!-- Logo at top of sidebar -->
         <div style="text-align: center; padding: 2.5rem 0 1.5rem;">
-            <img src="/images/logo-hafiz.svg" alt="Solution Hub" style="height: 60px; width: auto;">
+            <img src="/images/logo-hafiz.svg" alt="Solution Hub logo" title="Solution Hub Logo" style="height: 60px; width: auto;">
         </div>
         <ul>
             <li><a href="/" onclick="toggleMobileMenu()">Home</a></li>

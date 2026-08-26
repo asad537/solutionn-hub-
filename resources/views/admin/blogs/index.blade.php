@@ -106,7 +106,7 @@
                     <td>
                         <div class="blog-info">
                             <div class="blog-img-wrap">
-                                <img src="{{ $blog->featured_image ?: 'https://via.placeholder.com/300x200' }}" class="blog-img" alt="">
+                                <img src="{{ $blog->featured_image ?: 'https://via.placeholder.com/300x200' }}" class="blog-img" alt="{{ $blog->title }}" title="{{ $blog->title }}">
                             </div>
                             <div>
                                 <div class="blog-title">{{ $blog->title }}</div>

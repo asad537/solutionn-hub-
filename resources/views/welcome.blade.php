@@ -1770,7 +1770,7 @@
         /* Why choose us feature row */
         .page-home .why-choose-section {
             scroll-margin-top:66px;
-            padding:64px 0 72px;
+            padding:10px 0 29px;
             background:
                 radial-gradient(circle at 50% 0,rgba(54,31,139,.07),transparent 45%),
                 linear-gradient(180deg,#060b17 0%,#070d19 100%);
@@ -1876,7 +1876,7 @@
         /* Supported-platform showcase */
         .platform-showcase {
             scroll-margin-top:66px;
-            padding:64px 0 72px;
+            padding:20px 0 72px;
             background:
                 radial-gradient(circle at 50% 40%,rgba(26,60,124,.08),transparent 48%),
                 linear-gradient(180deg,#080d18 0%,#060b16 100%) !important;
@@ -2437,7 +2437,7 @@
                         <p class="platform-prompt">Try a sample link or choose a platform</p>
                         <div class="platform-strip" aria-label="Popular supported platforms">
                             @foreach (array_slice($platforms, 0, 6) as $platform)
-                                <a href="{{ route('platforms.show', $platform['slug']) }}" class="platform-pill"><span class="platform-dot" style="background:{{ $platform['accent'] }}"><img src="https://cdn.simpleicons.org/{{ $platform['icon'] }}/ffffff" alt="" loading="lazy"></span>{{ $platform['name'] }}</a>
+                                <a href="{{ route('platforms.show', $platform['slug']) }}" class="platform-pill"><span class="platform-dot" style="background:{{ $platform['accent'] }}"><img src="https://cdn.simpleicons.org/{{ $platform['icon'] }}/ffffff" alt="{{ $platform['name'] }} icon" title="{{ $platform['name'] }} Icon" loading="lazy"></span>{{ $platform['name'] }}</a>
                             @endforeach
                         </div>
                         <div class="hero-trust" aria-label="Service benefits">
@@ -2752,7 +2752,7 @@
                             <h1>{{ $post['title'] }}</h1>
                             <p>{{ $post['excerpt'] }}</p>
                         </div>
-                        <img src="{{ asset($post['image']) }}" alt="{{ $post['title'] }}" width="960" height="540">
+                        <img src="{{ asset($post['image']) }}" alt="{{ $post['image_alt'] ?? $post['title'] }}" title="{{ $post['title'] }}" width="960" height="540">
                     </div>
                 </header>
                 <div class="wrap article-layout">
@@ -2772,7 +2772,7 @@
                     </aside>
                 </div>
             </article>
-            <section class="related-section"><div class="wrap"><div class="section-head"><h2>Related guides</h2><p>Continue learning about video formats, quality, and safer downloads.</p></div><div class="grid blog-grid">@foreach($relatedPosts as $related)<article class="post-card"><a class="post-cover" href="{{ route('blog.show', $related['slug']) }}"><img src="{{ asset($related['image']) }}" alt="{{ $related['title'] }}" loading="lazy"></a><div class="post-content"><div class="post-meta"><span>{{ $related['category'] }}</span><span>{{ $related['read'] }}</span></div><h3>{{ $related['title'] }}</h3><p>{{ $related['excerpt'] }}</p><a class="read" href="{{ route('blog.show', $related['slug']) }}">Read guide →</a></div></article>@endforeach</div></div></section>
+            <section class="related-section"><div class="wrap"><div class="section-head"><h2>Related guides</h2><p>Continue learning about video formats, quality, and safer downloads.</p></div><div class="grid blog-grid">@foreach($relatedPosts as $related)<article class="post-card"><a class="post-cover" href="{{ route('blog.show', $related['slug']) }}"><img src="{{ asset($related['image']) }}" alt="{{ $related['image_alt'] ?? $related['title'] }}" title="{{ $related['title'] }}" loading="lazy"></a><div class="post-content"><div class="post-meta"><span>{{ $related['category'] }}</span><span>{{ $related['read'] }}</span></div><h3>{{ $related['title'] }}</h3><p>{{ $related['excerpt'] }}</p><a class="read" href="{{ route('blog.show', $related['slug']) }}">Read guide →</a></div></article>@endforeach</div></div></section>
         </main>
     @elseif ($page === 'privacy')
         <main class="{{ $page === 'contact' ? 'contact-page' : '' }}">

@@ -859,7 +859,7 @@
             @foreach ($platformIcons as $p)
                 <span class="platform-pill">
                     <span class="platform-dot" style="background:{{ $p['accent'] }}">
-                        <img src="https://cdn.simpleicons.org/{{ $p['icon'] }}/ffffff" alt="" loading="lazy" onerror="this.style.display='none'">
+                        <img src="https://cdn.simpleicons.org/{{ $p['icon'] }}/ffffff" alt="{{ $p['name'] }} icon" title="{{ $p['name'] }} Icon" loading="lazy" onerror="this.style.display='none'">
                     </span>
                     {{ $p['name'] }}
                 </span>
@@ -1105,7 +1105,7 @@
                     @foreach ($blogs as $guide)
                     <article class="platform-guide-card">
                         <a href="{{ route('blog.show', $guide->slug) }}" class="platform-guide-img-link">
-                            <img src="{{ $guide->featured_image ?: '/images/custom_blogs/img_1.png' }}" alt="{{ $guide->title }}" loading="lazy">
+                            <img src="{{ $guide->featured_image ?: '/images/custom_blogs/img_1.png' }}" alt="{{ $guide->title }}" title="{{ $guide->title }}" loading="lazy">
                         </a>
                         <div class="platform-guide-body">
                             <span class="platform-guide-tag">{{ $guide->tags ?: 'Guide' }}</span>

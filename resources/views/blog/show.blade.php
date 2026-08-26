@@ -642,7 +642,7 @@
                     <a href="{{ route($type . '.show', $item->slug) }}" class="popular-item">
                         <div class="pop-avatar">
                             @if($item->featured_image)
-                                <img src="{{ $item->featured_image }}" alt="{{ $item->title }}" loading="lazy">
+                                <img src="{{ $item->featured_image }}" alt="{{ $item->title }}" title="{{ $item->title }}" loading="lazy">
                             @else
                                 {{ strtoupper(substr($item->title, 0, 1)) }}
                             @endif
@@ -678,7 +678,7 @@
             {{-- Featured Image --}}
             @if($blog->featured_image)
             <div class="featured-img-wrap">
-                <img src="{{ $blog->featured_image }}" alt="{{ $blog->title }}">
+                <img src="{{ $blog->featured_image }}" alt="{{ $blog->title }}" title="{{ $blog->title }}">
             </div>
             @endif
 
@@ -725,7 +725,7 @@
             <div class="related-grid">
                 @foreach($related as $post)
                 <a href="{{ route($type . '.show', $post->slug) }}" class="related-card">
-                    <img src="{{ $post->featured_image ?: '/images/placeholder-blog.jpg' }}" alt="{{ $post->title }}" class="related-card-img" loading="lazy">
+                    <img src="{{ $post->featured_image ?: '/images/placeholder-blog.jpg' }}" alt="{{ $post->title }}" title="{{ $post->title }}" class="related-card-img" loading="lazy">
                     <div class="related-card-body">
                         <h4>{{ $post->title }}</h4>
                         <span>{{ $post->created_at->format('M d, Y') }}</span>

@@ -1173,7 +1173,7 @@ if (typeof EditorJSManager === 'undefined') {
 
                         const imgStyleAttr = imgStyle ? ` style="${imgStyle.trim()}"` : '';
                         const figureStyleAttr = figureStyle ? ` style="${figureStyle.trim()}"` : '';
-                        html += `<figure class="editorjs-image"${dataAttrs}${figureStyleAttr}><img src="${imgUrl}" alt="${imgCaption}"${imgStyleAttr}><figcaption style="margin-top: 10px; font-size: 0.9em; color: #666; text-align: center;">${imgCaption}</figcaption></figure>`;
+                        html += `<figure class="editorjs-image"${dataAttrs}${figureStyleAttr}><img src="${imgUrl}" alt="${imgCaption}" title="${imgCaption}"${imgStyleAttr}><figcaption style="margin-top: 10px; font-size: 0.9em; color: #666; text-align: center;">${imgCaption}</figcaption></figure>`;
                         break;
                     }
                     case 'code':
@@ -1211,7 +1211,7 @@ if (typeof EditorJSManager === 'undefined') {
 
                         let linkHtml = '<div class="link-tool">';
                         if (linkImage) {
-                            linkHtml += `<div class="link-tool-image"><img src="${escapedImage}" alt="${escapedTitle}"></div>`;
+                            linkHtml += `<div class="link-tool-image"><img src="${escapedImage}" alt="${escapedTitle}" title="${escapedTitle}"></div>`;
                         }
                         linkHtml += `<div class="link-tool-content">`;
                         linkHtml += `<a href="${escapedUrl}" target="_blank" rel="noopener noreferrer" class="link-tool-link">${escapedTitle}</a>`;
@@ -1234,7 +1234,7 @@ if (typeof EditorJSManager === 'undefined') {
                                 <div class="cdx-two-column__text">${text}</div>
                                 <div class="cdx-two-column__image">
                                     <div class="cdx-two-column__image-wrapper">
-                                        <img src="${imgUrl}" alt="${imgAlt}" class="cdx-two-column__preview" style="display: block;">
+                                        <img src="${imgUrl}" alt="${imgAlt}" title="${imgAlt}" class="cdx-two-column__preview" style="display: block;">
                                     </div>
                                 </div>
                             </div>

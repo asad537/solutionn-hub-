@@ -150,7 +150,7 @@
                 @if($post->image)
                 <div class="form-group">
                     <label class="form-label">Current Image</label>
-                    <img src="{{ $post->image }}" alt="Current" class="current-img">
+                    <img src="{{ $post->image }}" alt="Current {{ $post->title }} image" title="{{ $post->title }}" class="current-img">
                 </div>
                 @endif
 

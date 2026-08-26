@@ -195,7 +195,7 @@
             <!-- Brand -->
             <div>
                 <a href="/" class="footer-logo-link">
-                    <img src="/images/logo-hafiz.svg" alt="Solution Hub" width="190" height="60">
+                    <img src="/images/logo-hafiz.svg" alt="Solution Hub logo" title="Solution Hub Logo" width="190" height="60">
                 </a>
                 <p class="footer-desc" style="line-height: 1.6;">
                     {{ $footerDescription }}
