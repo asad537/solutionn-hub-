@@ -2,7 +2,7 @@
 <header class="topbar solution-topbar">
     <nav class="wrap nav solution-nav">
         <a class="brand" href="{{ route('home') }}" aria-label="Solution Hub home">
-            <img src="/images/logo-hafiz.svg" alt="Solution Hub logo" title="Solution Hub Logo" width="190" height="60" style="height:75px;width:auto;object-fit:contain;">
+            <img src="{{ asset('images/logo-hafiz.svg') }}?v={{ filemtime(public_path('images/logo-hafiz.svg')) }}" alt="Solution Hub logo" title="Solution Hub Logo" width="190" height="60" style="height:75px;width:auto;object-fit:contain;">
         </a>
         <button class="mobile-lang-button" id="mobileLangButton" type="button" aria-label="Choose language" aria-expanded="false">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
@@ -115,7 +115,6 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ request()->routeIs('home') ? '#how-it-works' : route('home') . '#how-it-works' }}">How It Works</a>
             <a class="{{ in_array(($page ?? ''), ['blog', 'blog-post']) ? 'active' : '' }}" href="{{ route('blog') }}">Blog</a>
             <a class="{{ request()->routeIs('public.faqs') ? 'active' : '' }}" href="{{ route('public.faqs') }}">FAQ</a>
             <a class="{{ ($page ?? "") === 'privacy' ? 'active' : '' }}" href="{{ route('privacy') }}">Privacy</a>
