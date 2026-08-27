@@ -5,8 +5,7 @@
     @include('partials.google-tag')
     <!-- Preload hero image for instant LCP -->
     <link rel="preload" as="image" href="/images/faqs.webp" type="image/webp" fetchpriority="high">
-    <link rel="icon" type="image/webp" href="/images/Fav-logo.webp">
-    <link rel="apple-touch-icon" href="/images/logo-hafiz.svg">
+    @include('partials.favicons')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @php $seo = \App\Models\PageSeo::getFor('faqs'); @endphp
@@ -294,6 +293,7 @@
     </style>
     <style>h1{font-size:3rem !important;}h2{font-size:2rem !important;}h3{font-size:1.5rem !important;}p{font-size:1.2rem !important;}</style>
     @include('partials.adsense-head')
+    <link rel="stylesheet" href="{{ asset('css/light-theme.css') }}?v={{ filemtime(public_path('css/light-theme.css')) }}">
 </head>
 
 <body>

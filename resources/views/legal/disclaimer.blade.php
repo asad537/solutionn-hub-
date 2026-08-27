@@ -3,8 +3,7 @@
 
 <head>
     @include('partials.google-tag')
-    <link rel="icon" type="image/webp" href="/images/Fav-logo.webp">
-    <link rel="apple-touch-icon" href="/images/logofinal.png">
+    @include('partials.favicons')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @php $seo = \App\Models\PageSeo::getFor('disclaimer'); @endphp

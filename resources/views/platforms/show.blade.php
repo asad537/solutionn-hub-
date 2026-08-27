@@ -294,7 +294,7 @@
         .trust-item { padding: 22px; text-align: center; border-right: 1px solid #202733; }
         .trust-item:last-child { border-right: 0; }
         .trust-item strong { display: block; margin-bottom: 5px; font-size: 15px; color: #fff; }
-        .trust-item span { color: #a0aaba; font-size: 13px; }
+        .trust-item span { color: #000000; font-size: 13px; }
         
         @media (max-width:860px) {
             .trust-grid { grid-template-columns: 1fr; }
@@ -808,6 +808,7 @@
 </style>
     <link rel="stylesheet" href="{{ asset('css/result-dashboard.css') }}">
     @include('partials.adsense-head')
+    <link rel="stylesheet" href="{{ asset('css/light-theme.css') }}?v={{ filemtime(public_path('css/light-theme.css')) }}">
 </head>
 
 <body>

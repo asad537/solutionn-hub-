@@ -625,6 +625,7 @@
     </style>
 
     @include('partials.adsense-head')
+    <link rel="stylesheet" href="{{ asset('css/light-theme.css') }}?v={{ filemtime(public_path('css/light-theme.css')) }}">
 </head>
 <body class="has-fixed-header">
     @include('partials.navbar')

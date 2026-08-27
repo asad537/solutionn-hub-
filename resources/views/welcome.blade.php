@@ -2362,6 +2362,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/result-dashboard.css') }}">
     @include('partials.adsense-head')
+    <link rel="stylesheet" href="{{ asset('css/light-theme.css') }}?v={{ filemtime(public_path('css/light-theme.css')) }}">
 </head>
 <body class="page-{{ $page }}">
     @include('partials.navbar')
@@ -2499,7 +2500,7 @@
             <section class="why-choose-section" id="why-choose" aria-labelledby="why-choose-title">
                 <div class="wrap">
                     <div class="why-choose-intro">
-                        <h2 id="why-choose-title">Why Choose Solution Hub?</h2>
+                        <h2 id="why-choose-title">Why Choose <span>Solution Hub?</span></h2>
                         <p>Built for speed, quality and a seamless experience.</p>
                     </div>
                     <div class="why-choose-grid">
