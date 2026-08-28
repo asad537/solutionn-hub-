@@ -920,16 +920,21 @@
                             children[i].style.display = 'none';
                             children[i].classList.add('hidden-content');
                         }
-                        btn.style.display = 'inline-block';
+                        btn.classList.add('is-visible');
+                        btn.setAttribute('aria-expanded', 'false');
                         
                         btn.addEventListener('click', function() {
                             const hiddenEls = content.querySelectorAll('.hidden-content');
                             if (btn.innerText === 'Read More') {
                                 hiddenEls.forEach(el => el.style.display = '');
                                 btn.innerText = 'Read Less';
+                                btn.classList.add('is-expanded');
+                                btn.setAttribute('aria-expanded', 'true');
                             } else {
                                 hiddenEls.forEach(el => el.style.display = 'none');
                                 btn.innerText = 'Read More';
+                                btn.classList.remove('is-expanded');
+                                btn.setAttribute('aria-expanded', 'false');
                                 content.scrollIntoView({ behavior: 'smooth', block: 'start' });
                             }
                         });

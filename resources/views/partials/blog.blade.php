@@ -133,6 +133,32 @@
                     </div>
                 </aside>
             </div>
+
+            @if(isset($postsPaginator) && $postsPaginator->hasPages())
+                <nav class="blog-pagination" aria-label="Blog pagination">
+                    @if($postsPaginator->onFirstPage())
+                        <span class="blog-page-control is-disabled" aria-disabled="true">← Previous</span>
+                    @else
+                        <a class="blog-page-control" href="{{ $postsPaginator->previousPageUrl() }}" rel="prev">← Previous</a>
+                    @endif
+
+                    <div class="blog-page-numbers">
+                        @foreach(range(1, $postsPaginator->lastPage()) as $pageNumber)
+                            @if($pageNumber === $postsPaginator->currentPage())
+                                <span class="blog-page-number is-current" aria-current="page">{{ $pageNumber }}</span>
+                            @else
+                                <a class="blog-page-number" href="{{ $postsPaginator->url($pageNumber) }}">{{ $pageNumber }}</a>
+                            @endif
+                        @endforeach
+                    </div>
+
+                    @if($postsPaginator->hasMorePages())
+                        <a class="blog-page-control" href="{{ $postsPaginator->nextPageUrl() }}" rel="next">Next →</a>
+                    @else
+                        <span class="blog-page-control is-disabled" aria-disabled="true">Next →</span>
+                    @endif
+                </nav>
+            @endif
         @endif
     </div>
 </section>

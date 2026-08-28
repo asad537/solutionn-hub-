@@ -210,11 +210,27 @@ Route::get('/supported-platforms', function () use ($platforms, $loadPosts) {
 })->name('platforms');
 
 Route::get('/blog', function () use ($platforms, $loadPosts) {
+    $allPosts = $loadPosts();
+    $perPage = 10;
+    $currentPage = \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage();
+    $pagePosts = array_values(array_slice($allPosts, ($currentPage - 1) * $perPage, $perPage));
+    $postsPaginator = new \Illuminate\Pagination\LengthAwarePaginator(
+        $pagePosts,
+        count($allPosts),
+        $perPage,
+        $currentPage,
+        [
+            'path' => route('blog'),
+            'query' => request()->query(),
+        ]
+    );
+
     return view('welcome', [
-        'page'      => 'blog',
-        'platforms' => $platforms,
-        'posts'     => $loadPosts(),
-        'result'    => null,
+        'page'           => 'blog',
+        'platforms'      => $platforms,
+        'posts'          => $pagePosts,
+        'postsPaginator' => $postsPaginator,
+        'result'         => null,
     ]);
 })->name('blog');
 

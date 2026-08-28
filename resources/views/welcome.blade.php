@@ -3110,7 +3110,10 @@
                 readMoreBtn.classList.add('visible');
                 readMoreBtn.addEventListener('click', function() {
                     textContent.classList.toggle('expanded');
-                    if (textContent.classList.contains('expanded')) {
+                    const isExpanded = textContent.classList.contains('expanded');
+                    readMoreBtn.classList.toggle('is-expanded', isExpanded);
+                    readMoreBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+                    if (isExpanded) {
                         readMoreBtn.textContent = 'Read Less';
                     } else {
                         readMoreBtn.textContent = 'Read More';
