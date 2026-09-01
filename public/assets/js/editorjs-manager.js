@@ -504,6 +504,7 @@ if (typeof EditorJSManager === 'undefined') {
             this.undoInstances = {}; // Store undo instances
             this.undoObservers = {}; // Store mutation observers for cleanup
             this.undoHandlers = {}; // Store undo handlers for cleanup
+            this.selectionToolbars = {};
             this.uploadEndpoint = document.querySelector('meta[name="editorjs-upload-url"]')?.content || '/admin/cms/upload-editor-image';
             this.csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
         }
@@ -546,6 +547,7 @@ if (typeof EditorJSManager === 'undefined') {
                     requestAnimationFrame(() => {
                         setTimeout(() => {
                             this.enableNativeUndo(holderId);
+                            this.enableSelectionToolbar(holderId);
                         }, 50); // Reduced delay since we're using RAF
                     });
                 }
@@ -559,6 +561,224 @@ if (typeof EditorJSManager === 'undefined') {
                 console.error('Editor.js initialization failed:', error);
                 throw error;
             }
+        }
+
+        /**
+         * Show a familiar rich-text bar directly below selected editor text.
+         * This supplements Editor.js block controls with quick typography tools.
+         */
+        enableSelectionToolbar(holderId) {
+            const holder = document.getElementById(holderId);
+            if (!holder || this.selectionToolbars[holderId]) return;
+
+            if (!document.getElementById('editor-selection-toolbar-styles')) {
+                const style = document.createElement('style');
+                style.id = 'editor-selection-toolbar-styles';
+                style.textContent = `
+                    .editor-selection-toolbar {
+                        position:fixed; z-index:100000; display:none; align-items:center; gap:5px;
+                        width:max-content; max-width:calc(100vw - 24px); padding:6px;
+                        color:#e8edf7; background:linear-gradient(145deg,#121a2a,#0d1422);
+                        border:1px solid #29354a; border-radius:12px;
+                        box-shadow:0 18px 45px rgba(15,23,42,.32),0 4px 12px rgba(15,23,42,.16),inset 0 1px 0 rgba(255,255,255,.04);
+                        font-family:Inter,Arial,sans-serif; white-space:nowrap;
+                    }
+                    .editor-selection-toolbar.is-visible { display:flex; }
+                    .editor-selection-toolbar::before {
+                        content:''; position:absolute; top:-6px; left:var(--est-arrow-left,24px); width:11px; height:11px;
+                        background:#121a2a; border-left:1px solid #29354a; border-top:1px solid #29354a;
+                        transform:rotate(45deg);
+                    }
+                    .editor-selection-toolbar.is-above::before {
+                        top:auto; bottom:-6px; transform:rotate(225deg);
+                    }
+                    .editor-selection-toolbar select,
+                    .editor-selection-toolbar button,
+                    .editor-selection-toolbar input { font:inherit; }
+                    .editor-selection-toolbar select {
+                        display:block !important; flex:0 0 auto !important; width:118px !important; min-width:118px !important;
+                        height:36px !important; padding:0 28px 0 10px !important;
+                        color:#e8edf7 !important; background-color:#182234 !important;
+                        border:1px solid #334158 !important; border-radius:8px !important;
+                        font-size:12px !important; font-weight:700 !important; line-height:36px !important;
+                        outline:none !important; cursor:pointer; box-shadow:none !important;
+                    }
+                    .editor-selection-toolbar .est-heading { width:120px !important; min-width:120px !important; }
+                    .editor-selection-toolbar .est-font { width:138px !important; min-width:138px !important; }
+                    .editor-selection-toolbar .est-size { width:102px !important; min-width:102px !important; }
+                    .editor-selection-toolbar button,
+                    .editor-selection-toolbar .est-color-wrap {
+                        display:inline-grid !important; place-items:center; flex:0 0 36px;
+                        width:36px !important; min-width:36px !important; height:36px !important; min-height:36px !important;
+                        margin:0 !important; padding:0 !important;
+                        color:#d5dceb !important; background:#182234 !important;
+                        border:1px solid #334158 !important; border-radius:8px !important;
+                        font-size:13px !important; font-weight:800 !important; line-height:1 !important;
+                        box-shadow:none !important; cursor:pointer;
+                    }
+                    .editor-selection-toolbar button:hover,
+                    .editor-selection-toolbar button:focus,
+                    .editor-selection-toolbar select:hover,
+                    .editor-selection-toolbar select:focus {
+                        color:#fff !important; border-color:#8a5cf5 !important; background:#251b46 !important;
+                        box-shadow:0 0 0 2px rgba(139,92,246,.13) !important;
+                    }
+                    .editor-selection-toolbar .est-divider { flex:0 0 1px; width:1px; height:24px; margin:0 2px; background:#334158; }
+                    .editor-selection-toolbar .est-color-wrap { position:relative; overflow:hidden; }
+                    .editor-selection-toolbar .est-color-wrap::after { content:''; position:absolute; right:7px; bottom:5px; left:7px; height:3px; background:var(--est-color,#f8fafc); border-radius:2px; }
+                    .editor-selection-toolbar .est-color { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
+                    @media(max-width:720px) {
+                        .editor-selection-toolbar { gap:4px; padding:5px; overflow-x:auto; scrollbar-width:thin; }
+                        .editor-selection-toolbar .est-heading { width:105px !important; min-width:105px !important; }
+                        .editor-selection-toolbar .est-font { width:116px !important; min-width:116px !important; }
+                        .editor-selection-toolbar .est-size { width:92px !important; min-width:92px !important; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            const toolbar = document.createElement('div');
+            toolbar.className = 'editor-selection-toolbar';
+            toolbar.setAttribute('role', 'toolbar');
+            toolbar.setAttribute('aria-label', 'Text formatting');
+            toolbar.innerHTML = `
+                <select class="est-heading" aria-label="Heading style" title="Heading style">
+                    <option value="p">Paragraph</option><option value="h2">Heading 2</option>
+                    <option value="h3">Heading 3</option><option value="h4">Heading 4</option>
+                    <option value="h5">Heading 5</option><option value="h6">Heading 6</option>
+                </select>
+                <select class="est-font" aria-label="Font family" title="Font family">
+                    <option value="">Font Family</option><option value="Inter">Inter</option>
+                    <option value="Arial">Arial</option><option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option><option value="Verdana">Verdana</option>
+                    <option value="Trebuchet MS">Trebuchet</option><option value="Courier New">Courier New</option>
+                </select>
+                <select class="est-size" aria-label="Font size" title="Font size">
+                    <option value="">Font Size</option><option value="12px">12 px</option><option value="14px">14 px</option>
+                    <option value="16px">16 px</option><option value="18px">18 px</option><option value="20px">20 px</option>
+                    <option value="24px">24 px</option><option value="28px">28 px</option><option value="32px">32 px</option>
+                    <option value="40px">40 px</option><option value="48px">48 px</option>
+                </select>
+                <span class="est-divider" aria-hidden="true"></span>
+                <button type="button" data-command="bold" title="Bold" aria-label="Bold">B</button>
+                <button type="button" data-command="italic" title="Italic" aria-label="Italic"><i>I</i></button>
+                <button type="button" data-command="underline" title="Underline" aria-label="Underline"><u>U</u></button>
+                <button type="button" data-command="link" title="Add link" aria-label="Add link">↗</button>
+                <label class="est-color-wrap" title="Text color" aria-label="Text color">A<input class="est-color" type="color" value="#111827"></label>
+                <button type="button" data-command="clear" title="Clear formatting" aria-label="Clear formatting">Tx</button>
+            `;
+            document.body.appendChild(toolbar);
+
+            let savedRange = null;
+            let activeEditable = null;
+
+            const restoreSelection = () => {
+                if (!savedRange) return false;
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(savedRange);
+                return true;
+            };
+
+            const notifyChange = () => {
+                if (activeEditable) activeEditable.dispatchEvent(new InputEvent('input', { bubbles:true, inputType:'formatSetBlockTextDirection' }));
+            };
+
+            const positionToolbar = (rect) => {
+                toolbar.classList.add('is-visible');
+                toolbar.classList.remove('is-above');
+                const toolbarRect = toolbar.getBoundingClientRect();
+                let left = rect.left + (rect.width / 2) - (toolbarRect.width / 2);
+                left = Math.max(12, Math.min(left, window.innerWidth - toolbarRect.width - 12));
+                let top = rect.bottom + 10;
+                if (top + toolbarRect.height > window.innerHeight - 10) {
+                    top = Math.max(10, rect.top - toolbarRect.height - 10);
+                    toolbar.classList.add('is-above');
+                }
+                toolbar.style.left = `${left}px`;
+                toolbar.style.top = `${top}px`;
+                const arrowLeft = Math.max(16, Math.min(rect.left + (rect.width / 2) - left - 6, toolbarRect.width - 22));
+                toolbar.style.setProperty('--est-arrow-left', `${arrowLeft}px`);
+            };
+
+            const selectionHandler = () => {
+                if (toolbar.contains(document.activeElement)) return;
+                const selection = window.getSelection();
+                if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+                    toolbar.classList.remove('is-visible');
+                    return;
+                }
+                const range = selection.getRangeAt(0);
+                const node = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE
+                    ? range.commonAncestorContainer
+                    : range.commonAncestorContainer.parentElement;
+                const editable = node?.closest?.('[contenteditable="true"]');
+                if (!editable || !holder.contains(editable)) {
+                    toolbar.classList.remove('is-visible');
+                    return;
+                }
+                const rect = range.getBoundingClientRect();
+                if (!rect.width && !rect.height) return;
+                savedRange = range.cloneRange();
+                activeEditable = editable;
+                positionToolbar(rect);
+            };
+
+            const exec = (command, value = null) => {
+                if (!restoreSelection()) return;
+                document.execCommand(command, false, value);
+                savedRange = window.getSelection()?.rangeCount ? window.getSelection().getRangeAt(0).cloneRange() : savedRange;
+                notifyChange();
+            };
+
+            toolbar.addEventListener('mousedown', event => {
+                if (event.target.closest('button')) event.preventDefault();
+                event.stopPropagation();
+            });
+            toolbar.querySelectorAll('button[data-command]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const command = button.dataset.command;
+                    if (command === 'link') {
+                        const url = window.prompt('Enter link URL', 'https://');
+                        if (url && url !== 'https://') exec('createLink', url);
+                    } else if (command === 'clear') {
+                        exec('removeFormat');
+                    } else {
+                        exec(command);
+                    }
+                });
+            });
+            toolbar.querySelector('.est-heading').addEventListener('change', event => {
+                exec('formatBlock', event.target.value.toUpperCase());
+            });
+            toolbar.querySelector('.est-font').addEventListener('change', event => {
+                if (event.target.value) exec('fontName', event.target.value);
+            });
+            toolbar.querySelector('.est-size').addEventListener('change', event => {
+                if (!event.target.value || !restoreSelection()) return;
+                document.execCommand('fontSize', false, '7');
+                holder.querySelectorAll('font[size="7"]').forEach(font => {
+                    const span = document.createElement('span');
+                    span.style.fontSize = event.target.value;
+                    span.innerHTML = font.innerHTML;
+                    font.replaceWith(span);
+                });
+                notifyChange();
+            });
+            toolbar.querySelector('.est-color').addEventListener('input', event => {
+                toolbar.querySelector('.est-color-wrap').style.setProperty('--est-color', event.target.value);
+                exec('foreColor', event.target.value);
+            });
+
+            const hideToolbar = event => {
+                if (!toolbar.contains(event.target) && !holder.contains(event.target)) toolbar.classList.remove('is-visible');
+            };
+            document.addEventListener('selectionchange', selectionHandler);
+            document.addEventListener('pointerdown', hideToolbar);
+            window.addEventListener('resize', () => toolbar.classList.remove('is-visible'));
+            window.addEventListener('scroll', () => toolbar.classList.remove('is-visible'), true);
+
+            this.selectionToolbars[holderId] = { toolbar, selectionHandler, hideToolbar };
         }
 
         /**
