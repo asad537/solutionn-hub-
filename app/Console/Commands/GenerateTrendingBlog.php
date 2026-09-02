@@ -22,7 +22,7 @@ class GenerateTrendingBlog extends Command
         if (!$topic) return self::FAILURE;
 
         $prompt = "Write a helpful, original 1000-word SEO blog about the public-media topic: {$topic}. Return ONLY valid JSON with keys title, excerpt, meta_title, meta_description, category, content, image_alt. Content must be safe, factual, HTML with h2/p/ul, and mention permission/copyright. Do not invent statistics or news.";
-        $response = Http::timeout(90)->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='.urlencode((string) config('services.gemini.key')), ['contents'=>[['parts'=>[['text'=>$prompt]]]]]);
+        $response = Http::timeout(90)->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key='.urlencode((string) config('services.gemini.key')), ['contents'=>[['parts'=>[['text'=>$prompt]]]]]);
         if (!$response->successful()) { $this->error('Gemini request failed'); return self::FAILURE; }
         $text = $response->json('candidates.0.content.parts.0.text', '');
         $text = preg_replace('/^```json|```$/m', '', trim($text));
