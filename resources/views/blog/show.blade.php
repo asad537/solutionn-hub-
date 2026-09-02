@@ -643,7 +643,7 @@
                     <a href="{{ route($type . '.show', $item->slug) }}" class="popular-item">
                         <div class="pop-avatar">
                             @if($item->featured_image)
-                                <img src="{{ $item->featured_image }}" alt="{{ $item->title }}" title="{{ $item->title }}" loading="lazy">
+                                <img src="{{ $item->featured_image }}" alt="{{ $item->title }}" title="{{ $item->title }}" loading="lazy" onerror="this.onerror=null;this.src='/images/mobile/blogmobile.webp';">
                             @else
                                 {{ strtoupper(substr($item->title, 0, 1)) }}
                             @endif
@@ -679,7 +679,7 @@
             {{-- Featured Image --}}
             @if($blog->featured_image)
             <div class="featured-img-wrap">
-                <img src="{{ $blog->featured_image }}" alt="{{ $blog->title }}" title="{{ $blog->title }}">
+                <img src="{{ $blog->featured_image }}" alt="{{ $blog->title }}" title="{{ $blog->title }}" onerror="this.onerror=null;this.src='/images/mobile/blogmobile.webp';">
             </div>
             @endif
 
@@ -874,4 +874,3 @@
 
 </body>
 </html>
-
