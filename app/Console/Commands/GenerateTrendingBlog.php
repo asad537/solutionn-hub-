@@ -18,7 +18,11 @@ class GenerateTrendingBlog extends Command
         $xml = Http::timeout(20)->get('https://trends.google.com/trending/rss?geo=US')->body();
         preg_match_all('/<item>.*?<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>.*?<\/item>/s', $xml, $m);
         $topics = array_values(array_filter(array_map('trim', $m[1] ?? [])));
-        $topic = collect($topics)->first(fn ($t) => strlen($t) > 3 && !BlogPost::where('title', 'like', "%{$t}%")->exists());
+        $allowed = ['video', 'download', 'reel', 'tiktok', 'instagram', 'youtube', 'facebook', 'pinterest', 'whatsapp', 'vimeo', 'dailymotion', 'media', 'mp4', 'audio', 'streaming', 'watermark'];
+        $topic = collect($topics)->first(function ($t) use ($allowed) {
+            $t = strtolower($t);
+            return strlen($t) > 3 && collect($allowed)->contains(fn ($word) => str_contains($t, $word)) && !BlogPost::where('title', 'like', "%{$t}%")->exists();
+        });
         if (!$topic) return self::FAILURE;
 
         $prompt = "Write a helpful, original 1000-word SEO blog about the public-media topic: {$topic}. Return ONLY valid JSON with keys title, excerpt, meta_title, meta_description, category, content, image_alt. Content must be safe, factual, HTML with h2/p/ul, and mention permission/copyright. Do not invent statistics or news.";
