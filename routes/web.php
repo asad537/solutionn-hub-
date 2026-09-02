@@ -105,6 +105,7 @@ Route::get('/admin/logout', [AdminController::class, 'logout'])->name('admin.log
 Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 Route::get('/admin/dashboard-data', [AdminController::class, 'dashboardData'])->name('admin.dashboard.data');
 Route::post('/admin/publish-draft-blogs', [AdminController::class, 'publishDraftBlogs'])->name('admin.publish_draft_blogs');
+Route::post('/admin/generate-trending-blog', [AdminController::class, 'generateTrendingBlog'])->name('admin.generate_trending_blog');
 Route::get('/admin/homepage', [AdminController::class, 'homepageEdit'])->name('admin.homepage');
 Route::post('/admin/homepage', [AdminController::class, 'homepageSave'])->name('admin.homepage.save');
 

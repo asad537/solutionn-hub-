@@ -8,6 +8,10 @@
     @csrf
     <button type="submit" class="btn-preview" style="cursor:pointer"><i class="fas fa-upload"></i> Publish Draft Blogs</button>
 </form>
+<form method="POST" action="{{ route('admin.generate_trending_blog') }}" onsubmit="return confirm('Generate and publish a new Google Trends blog now?');" style="display:inline">
+    @csrf
+    <button type="submit" class="btn-preview" style="cursor:pointer"><i class="fas fa-wand-magic-sparkles"></i> Generate Trending Blog</button>
+</form>
 @endsection
 
 @push('styles')

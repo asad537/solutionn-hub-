@@ -78,6 +78,13 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard')->with('success', trim(Artisan::output()));
     }
 
+    public function generateTrendingBlog()
+    {
+        if (!session('admin_logged_in')) return redirect()->route('admin.login');
+        Artisan::call('blog:generate-trending', ['--publish' => true]);
+        return redirect()->route('admin.dashboard')->with('success', trim(Artisan::output()) ?: 'Trending blog generation finished.');
+    }
+
     /**
      * Build all dashboard stats from the download_logs table.
      */
