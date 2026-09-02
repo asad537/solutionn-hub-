@@ -104,6 +104,7 @@ Route::post('/admin/login', [AdminController::class, 'doLogin'])->name('admin.lo
 Route::get('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 Route::get('/admin/dashboard-data', [AdminController::class, 'dashboardData'])->name('admin.dashboard.data');
+Route::post('/admin/publish-draft-blogs', [AdminController::class, 'publishDraftBlogs'])->name('admin.publish_draft_blogs');
 Route::get('/admin/homepage', [AdminController::class, 'homepageEdit'])->name('admin.homepage');
 Route::post('/admin/homepage', [AdminController::class, 'homepageSave'])->name('admin.homepage.save');
 

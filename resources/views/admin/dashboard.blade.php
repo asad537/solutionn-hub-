@@ -3,6 +3,12 @@
 @section('title', 'Analytics Dashboard')
 @section('header_icon')<i class="fas fa-chart-line" style="color:#3668de"></i>@endsection
 @section('header_title', 'Analytics Dashboard')
+@section('topbar_actions')
+<form method="POST" action="{{ route('admin.publish_draft_blogs') }}" onsubmit="return confirm('Publish all draft blogs now?');" style="display:inline">
+    @csrf
+    <button type="submit" class="btn-preview" style="cursor:pointer"><i class="fas fa-upload"></i> Publish Draft Blogs</button>
+</form>
+@endsection
 
 @push('styles')
 <style>

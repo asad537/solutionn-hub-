@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 
 class AdminController extends Controller
 {
@@ -62,6 +63,19 @@ class AdminController extends Controller
     {
         if (!session('admin_logged_in')) return response()->json(['error' => 'Unauthorized'], 401);
         return response()->json($this->getDashboardData());
+    }
+
+    /** Publish any blog drafts from the admin dashboard. */
+    public function publishDraftBlogs()
+    {
+        if (!session('admin_logged_in')) return redirect()->route('admin.login');
+
+        Artisan::call('db:seed', [
+            '--class' => 'Database\\Seeders\\PublishAllBlogsSeeder',
+            '--force' => true,
+        ]);
+
+        return redirect()->route('admin.dashboard')->with('success', trim(Artisan::output()));
     }
 
     /**
