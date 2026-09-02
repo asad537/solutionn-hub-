@@ -25,8 +25,9 @@ class GenerateTrendingBlog extends Command
         $response = Http::timeout(90)->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key='.urlencode((string) config('services.gemini.key')), ['contents'=>[['parts'=>[['text'=>$prompt]]]]]);
         if (!$response->successful()) { $this->error('Gemini request failed'); return self::FAILURE; }
         $text = $response->json('candidates.0.content.parts.0.text', '');
-        $text = preg_replace('/^```json|```$/m', '', trim($text));
-        $data = json_decode($text, true);
+        $text = trim(preg_replace('/^```(?:json)?\s*|\s*```$/i', '', trim($text)));
+        $start = strpos($text, '{'); $end = strrpos($text, '}');
+        $data = ($start !== false && $end !== false) ? json_decode(substr($text, $start, $end - $start + 1), true) : null;
         if (!is_array($data) || empty($data['title']) || empty($data['content'])) return self::FAILURE;
         $slug = Str::slug($data['title']);
         if (BlogPost::where('slug', $slug)->exists()) return self::FAILURE;
