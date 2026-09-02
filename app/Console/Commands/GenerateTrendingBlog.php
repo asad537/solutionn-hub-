@@ -23,6 +23,16 @@ class GenerateTrendingBlog extends Command
             $t = strtolower($t);
             return strlen($t) > 3 && collect($allowed)->contains(fn ($word) => str_contains($t, $word)) && !BlogPost::where('title', 'like', "%{$t}%")->exists();
         });
+        if (!$topic) {
+            $fallbacks = [
+                'how to download YouTube videos safely',
+                'how to download TikTok videos without watermark',
+                'how to download Instagram Reels',
+                'how to download Facebook videos',
+                'best video format for WhatsApp Status',
+            ];
+            $topic = collect($fallbacks)->first(fn ($t) => !BlogPost::where('title', 'like', "%{$t}%")->exists());
+        }
         if (!$topic) return self::FAILURE;
 
         $prompt = "Write a helpful, original 1000-word SEO blog about the public-media topic: {$topic}. Return ONLY valid JSON with keys title, excerpt, meta_title, meta_description, category, content, image_alt. Content must be safe, factual, HTML with h2/p/ul, and mention permission/copyright. Do not invent statistics or news.";
