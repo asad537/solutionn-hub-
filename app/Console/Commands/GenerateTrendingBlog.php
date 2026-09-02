@@ -16,7 +16,7 @@ class GenerateTrendingBlog extends Command
     public function handle()
     {
         $xml = Http::timeout(20)->get('https://trends.google.com/trending/rss?geo=US')->body();
-        preg_match_all('/<title><!\[CDATA\[(.*?)\]\]><\/title>/s', $xml, $m);
+        preg_match_all('/<item>.*?<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>.*?<\/item>/s', $xml, $m);
         $topics = array_values(array_filter(array_map('trim', $m[1] ?? [])));
         $topic = collect($topics)->first(fn ($t) => strlen($t) > 3 && !BlogPost::where('title', 'like', "%{$t}%")->exists());
         if (!$topic) return self::FAILURE;
