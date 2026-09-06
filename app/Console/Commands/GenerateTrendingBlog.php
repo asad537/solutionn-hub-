@@ -30,6 +30,12 @@ class GenerateTrendingBlog extends Command
                 'how to download Instagram Reels',
                 'how to download Facebook videos',
                 'best video format for WhatsApp Status',
+                'how to download YouTube Shorts in HD',
+                'how to save Instagram videos to your phone',
+                'how to download TikTok live videos',
+                'how to save Pinterest video Pins',
+                'how to download Facebook Reels legally',
+                'best MP4 settings for social media videos',
             ];
             $topic = collect($fallbacks)->first(fn ($t) => !BlogPost::where('title', 'like', "%{$t}%")->exists());
         }

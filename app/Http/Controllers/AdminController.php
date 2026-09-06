@@ -87,8 +87,8 @@ class AdminController extends Controller
             exec('nohup php '.escapeshellarg($artisan).' blog:generate-trending --publish >> '.escapeshellarg($log).' 2>&1 &');
             $message = 'Trending blog generation started. Refresh after about 2 minutes.';
         } else {
-            Artisan::call('blog:generate-trending', ['--publish' => true]);
-            $message = trim(Artisan::output()) ?: 'Trending blog generation finished.';
+            $exitCode = Artisan::call('blog:generate-trending', ['--publish' => true]);
+            $message = trim(Artisan::output()) ?: ($exitCode === 0 ? 'Trending blog generation finished.' : 'No new relevant topic was available. Please try again.');
         }
         return redirect()->route('admin.dashboard')->with('success', $message);
     }
