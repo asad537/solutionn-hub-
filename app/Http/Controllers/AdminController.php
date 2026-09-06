@@ -81,8 +81,10 @@ class AdminController extends Controller
     public function generateTrendingBlog()
     {
         if (!session('admin_logged_in')) return redirect()->route('admin.login');
-        Artisan::call('blog:generate-trending', ['--publish' => true]);
-        return redirect()->route('admin.dashboard')->with('success', trim(Artisan::output()) ?: 'Trending blog generation finished.');
+        $artisan = base_path('artisan');
+        $log = storage_path('logs/trending-blog.log');
+        exec('nohup php '.escapeshellarg($artisan).' blog:generate-trending --publish >> '.escapeshellarg($log).' 2>&1 &');
+        return redirect()->route('admin.dashboard')->with('success', 'Trending blog generation started. Refresh after about 2 minutes.');
     }
 
     /**
