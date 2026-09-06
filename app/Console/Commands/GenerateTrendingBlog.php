@@ -43,6 +43,7 @@ class GenerateTrendingBlog extends Command
         $start = strpos($text, '{'); $end = strrpos($text, '}');
         $data = ($start !== false && $end !== false) ? json_decode(substr($text, $start, $end - $start + 1), true) : null;
         if (!is_array($data) || empty($data['title']) || empty($data['content'])) return self::FAILURE;
+        $data['title'] = Str::limit(trim($data['title']), 240, '');
         $slug = Str::slug($data['title']);
         if (BlogPost::where('slug', $slug)->exists()) return self::FAILURE;
         $image = '/images/blog/generated/'.$slug.'.svg';
