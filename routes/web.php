@@ -77,7 +77,12 @@ $softenSeoCopy = function (?string $text): string {
 
 $loadPosts = function () use ($softenSeoCopy) {
     try {
-        return BlogPost::published()->latest('published_at')->get()->map(function ($post) use ($softenSeoCopy) {
+        $reviewedSlugs = array_column(json_decode(file_get_contents(database_path('content/youtube-batch-01.json')), true), 'slug');
+        return BlogPost::published()->latest('published_at')->get()->map(function ($post) use ($softenSeoCopy, $reviewedSlugs) {
+            // Reviewed copy includes exact internal URLs; preserve its wording and links.
+            if (in_array($post->slug, $reviewedSlugs, true)) {
+                $softenSeoCopy = function ($text) { return $text ?? ''; };
+            }
             return [
                 'id' => $post->id,
                 'title' => $softenSeoCopy($post->title),
