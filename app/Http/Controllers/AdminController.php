@@ -107,7 +107,7 @@ class AdminController extends Controller
         $totalExtractions = DB::table('download_logs')->where('type', 'extraction')->count();
         $hasVisits = Schema::hasTable('analytics_visits');
         $activeUsers = $hasVisits ? DB::table('analytics_visits')->where('last_seen_at', '>=', now()->subMinutes(5))->distinct()->count('session_id') : 0;
-        $todayVisitors = $hasVisits ? DB::table('analytics_visits')->whereDate('created_at', today())->count() : 0;
+        $todayVisitors = $hasVisits ? DB::table('analytics_visits')->whereDate('created_at', today())->distinct()->count('session_id') : 0;
         $pageViews = $hasVisits ? DB::table('analytics_visits')->count() : 0;
         $attempts = $totalDownloads + $failedDownloads;
 
