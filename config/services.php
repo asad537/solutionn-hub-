@@ -23,7 +23,11 @@ return [
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
-    'gemini' => ['key' => env('GEMINI_API_KEY')],
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+        'image_model' => env('GEMINI_IMAGE_MODEL', 'gemini-3.1-flash-image'),
+        'image_generation_enabled' => env('GEMINI_IMAGE_GENERATION_ENABLED', false),
+    ],
 
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),

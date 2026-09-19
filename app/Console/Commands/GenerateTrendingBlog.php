@@ -94,9 +94,12 @@ class GenerateTrendingBlog extends Command
             $this->error('Gemini suggested a title already used by another blog; skipped to prevent a duplicate.');
             return self::FAILURE;
         }
-        $image = '/images/blog/generated/'.$slug.'.svg';
+        $image = $this->generateArticleImage($data, $slug) ?? '/images/blog/generated/'.$slug.'.svg';
         File::ensureDirectoryExists(public_path('images/blog/generated'));
-        File::put(public_path($image), $this->makeThumbnailSvg($data['title'], $slug));
+        if (str_ends_with($image, '.svg')) {
+            File::put(public_path($image), $this->makeThumbnailSvg($data['title'], $slug));
+            $this->warn('Gemini image generation was unavailable; using the designed SVG fallback.');
+        }
         BlogPost::create(['title'=>$data['title'],'slug'=>$slug,'category'=>$data['category'] ?? 'Guide','excerpt'=>$data['excerpt'] ?? Str::limit(strip_tags($data['content']), 180),'meta_title'=>$data['meta_title'] ?? $data['title'],'meta_description'=>$data['meta_description'] ?? Str::limit(strip_tags($data['excerpt'] ?? ''),155),'content'=>$data['content'],'image'=>$image,'image_alt'=>$data['image_alt'] ?? $data['title'],'read_minutes'=>5,'is_published'=>(bool)$this->option('publish'),'published_at'=>$this->option('publish') ? now() : null]);
         $this->info("Created: {$slug}"); return self::SUCCESS;
     }
@@ -152,5 +155,62 @@ class GenerateTrendingBlog extends Command
         }
 
         return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc"><title id="title">'.$safeTitle.'</title><desc id="desc">A modern illustration of a video player, download button, and safety shield.</desc><defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#081329"/><stop offset="1" stop-color="#111d43"/></linearGradient><linearGradient id="panel" x2="0" y2="1"><stop stop-color="#203b71"/><stop offset="1" stop-color="#101b35"/></linearGradient><linearGradient id="accent"><stop stop-color="#35e7c3"/><stop offset="1" stop-color="#378dff"/></linearGradient><linearGradient id="fade" x2="1"><stop stop-color="#081329" stop-opacity=".97"/><stop offset=".56" stop-color="#081329" stop-opacity=".88"/><stop offset="1" stop-color="#081329" stop-opacity=".08"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="14"/></filter><style>.title{font:700 43px Arial,sans-serif;fill:#fff;letter-spacing:-.7px}.label{font:700 16px Arial,sans-serif;letter-spacing:2px;fill:#65f1d2}.small{font:600 13px Arial,sans-serif;fill:#d7e4ff}</style></defs><rect width="1200" height="675" fill="url(#bg)"/><circle cx="955" cy="330" r="255" fill="#1c55c5" opacity=".22"/><circle cx="992" cy="329" r="130" fill="#24ddca" opacity=".12" filter="url(#glow)"/><g opacity=".28" stroke="#3b70c6"><path d="M745 0v675M825 0v675M905 0v675M985 0v675M1065 0v675M1145 0v675"/><path d="M690 120h510M690 200h510M690 280h510M690 360h510M690 440h510M690 520h510"/></g><g transform="translate(690 175)"><rect x="22" y="10" width="388" height="262" rx="22" fill="#061126" stroke="#5784dc" stroke-width="3" transform="rotate(-5 216 141)"/><rect x="0" y="54" width="410" height="263" rx="22" fill="url(#panel)" stroke="#7d9ee8" stroke-width="3"/><rect x="0" y="54" width="410" height="35" rx="20" fill="#172746"/><circle cx="24" cy="72" r="5" fill="#ff6b81"/><circle cx="43" cy="72" r="5" fill="#ffd36b"/><circle cx="62" cy="72" r="5" fill="#45e4b5"/><rect x="22" y="108" width="248" height="151" rx="12" fill="#0a1530" stroke="#37568f"/><path d="M25 211l49-46 34 28 47-58 49 54 35-32 31 27v69H25z" fill="#1b3872"/><path d="M24 224l58-33 36 20 42-40 39 33 43-28 30 19v64H24z" fill="#243e74" opacity=".9"/><circle cx="145" cy="178" r="24" fill="#fff" opacity=".95"/><path d="M139 164l21 14-21 14z" fill="#2167e8"/><rect x="288" y="109" width="98" height="19" rx="6" fill="#5785dd"/><rect x="288" y="141" width="78" height="11" rx="5" fill="#45649e"/><rect x="288" y="165" width="92" height="11" rx="5" fill="#45649e"/><rect x="288" y="201" width="84" height="43" rx="9" fill="#192d55" stroke="#36598f"/><rect x="22" y="277" width="366" height="6" rx="3" fill="#18325f"/><rect x="22" y="277" width="221" height="6" rx="3" fill="url(#accent)"/><circle cx="244" cy="280" r="8" fill="#fff"/></g><g transform="translate(900 77)"><circle cx="111" cy="111" r="105" fill="#0d244d" stroke="#47ddec" stroke-width="5"/><path d="M111 43v100m-43-41l43 43 43-43" fill="none" stroke="url(#accent)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/><path d="M58 151v31a14 14 0 0014 14h78a14 14 0 0014-14v-31" fill="none" stroke="#3be6ce" stroke-width="13" stroke-linecap="round"/></g><g transform="translate(1020 420)"><path d="M95 0l76 28v63c0 60-42 98-76 117-35-19-77-57-77-117V28z" fill="#0b1c3c" stroke="#bdeaff" stroke-width="8"/><path d="M60 91l27 29 49-57" fill="none" stroke="#32e3c6" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></g><rect width="1200" height="675" fill="url(#fade)"/><rect x="69" y="82" width="7" height="35" rx="3.5" fill="url(#accent)"/><text x="95" y="107" class="label">SOLUTION HUB  /  '.strtoupper(substr($slug, 0, 24)).'</text>'.$titleSvg.'<rect x="74" y="532" width="128" height="4" rx="2" fill="url(#accent)"/><text x="74" y="570" class="small">PRACTICAL GUIDE  ·  SAFE &amp; SIMPLE</text></svg>';
+    }
+
+    private function generateArticleImage(array $article, string $slug): ?string
+    {
+        $key = (string) config('services.gemini.key');
+        if ($key === '' || !config('services.gemini.image_generation_enabled')) return null;
+
+        $description = Str::limit(trim(strip_tags($article['excerpt'] ?? $article['content'] ?? '')), 400);
+        $prompt = "Create a polished 16:9 landscape editorial thumbnail image for a practical article titled: \"{$article['title']}\". Article context: {$description}. Make the illustration clearly specific to this exact article topic, with distinct relevant objects, settings, and colors rather than a generic social-media phone. Premium modern technology editorial artwork, clean composition, strong visual hierarchy, dark-to-color gradient background, suitable as a professional blog cover. Reserve a calm dark area on the left for text overlay. Do not include any text, letters, numbers, logos, watermarks, or copyrighted brand marks.";
+
+        try {
+            $response = Http::withHeaders(['x-goog-api-key' => $key])
+                ->acceptJson()
+                ->timeout(180)
+                ->post('https://generativelanguage.googleapis.com/v1beta/interactions', [
+                    'model' => config('services.gemini.image_model', 'gemini-3.1-flash-image'),
+                    'input' => $prompt,
+                    'response_format' => [
+                        'type' => 'image',
+                        'aspect_ratio' => '16:9',
+                        'image_size' => '1K',
+                    ],
+                ]);
+
+            if (!$response->successful()) {
+                $this->warn('Gemini thumbnail request failed (HTTP '.$response->status().'): '.Str::limit((string) $response->json('error.message', 'No error detail'), 240));
+                return null;
+            }
+
+            $image = null;
+            $mime = 'image/jpeg';
+            foreach ($response->json('steps', []) as $step) {
+                if (($step['type'] ?? null) !== 'model_output') continue;
+                foreach ($step['content'] ?? [] as $block) {
+                    if (($block['type'] ?? null) === 'image' && !empty($block['data'])) {
+                        $image = base64_decode($block['data'], true);
+                        $mime = $block['mime_type'] ?? $mime;
+                        break 2;
+                    }
+                }
+            }
+
+            if (!$image || strlen($image) < 1000) {
+                $this->warn('Gemini returned no usable thumbnail image.');
+                return null;
+            }
+
+            $extension = $mime === 'image/png' ? 'png' : 'jpg';
+            $path = '/images/blog/generated/'.$slug.'.'.$extension;
+            File::ensureDirectoryExists(public_path('images/blog/generated'));
+            File::put(public_path($path), $image);
+            return $path;
+        } catch (\Throwable $e) {
+            report($e);
+            $this->warn('Gemini thumbnail generation failed: '.Str::limit($e->getMessage(), 240));
+            return null;
+        }
     }
 }

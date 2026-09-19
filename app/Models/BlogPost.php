@@ -23,20 +23,6 @@ class BlogPost extends Model
 
     public function getFeaturedImageAttribute()
     {
-        $slug = strtolower($this->slug ?? '');
-        $platformImages = [
-            'instagram' => '/images/blog/generated/instagram-video-guide-visual.jpg',
-            'facebook' => '/images/blog/generated/facebook-video-guide-visual.jpg',
-            'tiktok' => '/images/blog/generated/tiktok-video-guide-visual.jpg',
-            'youtube' => '/images/blog/generated/youtube-save-guide-visual.jpg',
-        ];
-
-        foreach ($platformImages as $platform => $image) {
-            if (str_contains($slug, $platform) && file_exists(public_path($image))) {
-                return $image;
-            }
-        }
-
         return $this->image;
     }
 
