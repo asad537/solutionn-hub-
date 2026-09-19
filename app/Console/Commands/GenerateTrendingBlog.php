@@ -26,19 +26,38 @@ class GenerateTrendingBlog extends Command
                 report($e);
             }
         }
-        $allowed = ['video', 'download', 'reel', 'tiktok', 'instagram', 'youtube', 'facebook', 'pinterest', 'whatsapp', 'vimeo', 'dailymotion', 'media', 'mp4', 'audio', 'streaming', 'watermark'];
-        $topic = $this->firstUncoveredTopic($topics, $allowed);
+        $platforms = [
+            'youtube' => ['label' => 'YouTube', 'terms' => ['youtube'], 'queries' => ['YouTube video download guide', 'YouTube Shorts save videos']],
+            'facebook' => ['label' => 'Facebook', 'terms' => ['facebook'], 'queries' => ['Facebook Reels download guide', 'Facebook video quality save']],
+            'tiktok' => ['label' => 'TikTok', 'terms' => ['tiktok'], 'queries' => ['TikTok video download guide', 'TikTok video quality without watermark']],
+            'instagram' => ['label' => 'Instagram', 'terms' => ['instagram'], 'queries' => ['Instagram Reels download guide', 'Instagram video quality save']],
+        ];
 
-        // General daily Trends often has no media-related searches. Ask Google's
-        // live autocomplete for related searches instead of inventing a topic.
-        if (!$topic) {
+        // Rotate to the next platform after the most recently generated
+        // platform-specific post. This prevents YouTube suggestions from
+        // winning every run simply because they are queried first.
+        $platformKeys = array_keys($platforms);
+        $latestPlatform = $this->latestPlatformKey($platforms);
+        if ($latestPlatform !== null) {
+            $lastIndex = array_search($latestPlatform, $platformKeys, true);
+            $platformKeys = array_merge(array_slice($platformKeys, $lastIndex + 1), array_slice($platformKeys, 0, $lastIndex + 1));
+        }
+
+        $topic = null;
+        $selectedPlatform = null;
+        $usedSuggestions = false;
+        foreach ($platformKeys as $platformKey) {
+            $platform = $platforms[$platformKey];
+            $topic = $this->firstUncoveredTopic($topics, $platform['terms']);
+            if ($topic) {
+                $selectedPlatform = $platform;
+                break;
+            }
+
+            // Trends often has no video-platform searches. Use live Google
+            // autocomplete for this platform before rotating to the next one.
             $suggestions = [];
-            $queries = [
-                'youtube video save', 'youtube shorts save', 'instagram reels video',
-                'facebook reels video', 'tiktok video quality', 'pinterest video pin',
-                'whatsapp status video', 'dailymotion video', 'twitter video save',
-            ];
-            foreach ($queries as $query) {
+            foreach ($platform['queries'] as $query) {
                 try {
                     $response = Http::timeout(12)->get('https://suggestqueries.google.com/complete/search', [
                         'client' => 'firefox', 'q' => $query,
@@ -50,15 +69,22 @@ class GenerateTrendingBlog extends Command
                     report($e);
                 }
             }
-            $topic = $this->firstUncoveredTopic($suggestions, $allowed);
-            if (!$topic) {
-                $this->error('Google Trends had no relevant media trend, and Google suggestions returned no uncovered media topic. No blog was generated.');
-                return self::FAILURE;
+            $topic = $this->firstUncoveredTopic($suggestions, $platform['terms']);
+            if ($topic) {
+                $selectedPlatform = $platform;
+                $usedSuggestions = true;
+                break;
             }
-            $this->line('Google Trends had no matching topic; selected an uncovered query from Google Search Suggestions.');
         }
 
-        $prompt = "Write a helpful, original 1000-word SEO blog about the public-media topic: {$topic}. Return ONLY valid JSON with keys title, excerpt, meta_title, meta_description, category, content, image_alt. Content must be safe, factual, HTML with h2/p/ul, and mention permission/copyright. Add 1-3 natural internal links in the HTML content to relevant Solution Hub platform pages using these exact URLs: https://solutionhub.digital/youtube-video-downloader, https://solutionhub.digital/tiktok-video-downloader, https://solutionhub.digital/instagram-video-downloader, https://solutionhub.digital/facebook-video-downloader, https://solutionhub.digital/pinterest-video-downloader, and https://solutionhub.digital/supported-platforms. Do not invent statistics or news.";
+        if (!$topic || !$selectedPlatform) {
+            $this->error('Google Trends and Search Suggestions returned no uncovered topic for any supported video platform. No blog was generated.');
+            return self::FAILURE;
+        }
+        if ($usedSuggestions) $this->line('Selected an uncovered Google Search Suggestion for '.$selectedPlatform['label'].'.');
+        $this->line('Selected platform: '.$selectedPlatform['label'].'.');
+
+        $prompt = "Write a helpful, original 1000-word SEO blog about this public-media topic: {$topic}. The target platform is {$selectedPlatform['label']}. The article MUST be specifically about {$selectedPlatform['label']} and include the platform name naturally in the title; do not switch to YouTube or write a generic all-platform article. Return ONLY valid JSON with keys title, excerpt, meta_title, meta_description, category, content, image_alt. Content must be safe, factual, HTML with h2/p/ul, and mention permission/copyright. Add 1-3 natural internal links in the HTML content to relevant Solution Hub platform pages using these exact URLs: https://solutionhub.digital/youtube-video-downloader, https://solutionhub.digital/tiktok-video-downloader, https://solutionhub.digital/instagram-video-downloader, https://solutionhub.digital/facebook-video-downloader, https://solutionhub.digital/pinterest-video-downloader, and https://solutionhub.digital/supported-platforms. Do not invent statistics or news.";
         $response = null;
         for ($attempt = 1; $attempt <= 3; $attempt++) {
             try {
@@ -88,6 +114,10 @@ class GenerateTrendingBlog extends Command
             $this->error('Gemini responded, but its content was not valid blog JSON.');
             return self::FAILURE;
         }
+        if (!str_contains(strtolower($data['title']), strtolower($selectedPlatform['label']))) {
+            $this->error('Gemini did not include the required '.$selectedPlatform['label'].' platform in the title; no off-topic blog was saved.');
+            return self::FAILURE;
+        }
         $data['title'] = Str::limit(trim($data['title']), 240, '');
         $slug = Str::slug($data['title']);
         if (BlogPost::where('slug', $slug)->exists()) {
@@ -104,7 +134,7 @@ class GenerateTrendingBlog extends Command
         $this->info("Created: {$slug}"); return self::SUCCESS;
     }
 
-    private function firstUncoveredTopic(array $topics, array $allowed): ?string
+    private function firstUncoveredTopic(array $topics, array $platformTerms): ?string
     {
         $existingTitles = BlogPost::pluck('title')->map(function ($title) {
             return preg_replace('/[^a-z0-9]+/i', ' ', strtolower($title));
@@ -118,7 +148,7 @@ class GenerateTrendingBlog extends Command
             })));
 
             if (strlen($topic) < 8 || count($words) < 2) continue;
-            if (!collect($allowed)->contains(fn ($word) => str_contains($normalized, $word))) continue;
+            if (!collect($platformTerms)->contains(fn ($word) => str_contains($normalized, $word))) continue;
 
             $covered = $existingTitles->contains(function ($title) use ($normalized, $words) {
                 if (str_contains($title, $normalized) || str_contains($normalized, $title)) return true;
@@ -128,6 +158,18 @@ class GenerateTrendingBlog extends Command
             });
 
             if (!$covered) return $topic;
+        }
+
+        return null;
+    }
+
+    private function latestPlatformKey(array $platforms): ?string
+    {
+        foreach (BlogPost::query()->latest('created_at')->limit(100)->get(['title', 'slug']) as $post) {
+            $text = strtolower(($post->title ?? '').' '.($post->slug ?? ''));
+            foreach ($platforms as $key => $platform) {
+                if (str_contains($text, $key)) return $key;
+            }
         }
 
         return null;
