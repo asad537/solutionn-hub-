@@ -15,31 +15,48 @@ class GenerateTrendingBlog extends Command
 
     public function handle()
     {
-        $xml = Http::timeout(20)->get('https://trends.google.com/trending/rss?geo=US')->body();
-        preg_match_all('/<item>.*?<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>.*?<\/item>/s', $xml, $m);
-        $topics = array_values(array_filter(array_map('trim', $m[1] ?? [])));
-        $allowed = ['video', 'download', 'reel', 'tiktok', 'instagram', 'youtube', 'facebook', 'pinterest', 'whatsapp', 'vimeo', 'dailymotion', 'media', 'mp4', 'audio', 'streaming', 'watermark'];
-        $topic = collect($topics)->first(function ($t) use ($allowed) {
-            $t = strtolower($t);
-            return strlen($t) > 3 && collect($allowed)->contains(fn ($word) => str_contains($t, $word)) && !BlogPost::where('title', 'like', "%{$t}%")->exists();
-        });
-        if (!$topic) {
-            $fallbacks = [
-                'how to download YouTube videos safely',
-                'how to download TikTok videos without watermark',
-                'how to download Instagram Reels',
-                'how to download Facebook videos',
-                'best video format for WhatsApp Status',
-                'how to download YouTube Shorts in HD',
-                'how to save Instagram videos to your phone',
-                'how to download TikTok live videos',
-                'how to save Pinterest video Pins',
-                'how to download Facebook Reels legally',
-                'best MP4 settings for social media videos',
-            ];
-            $topic = collect($fallbacks)->first(fn ($t) => !BlogPost::where('title', 'like', "%{$t}%")->exists());
+        $topics = [];
+        foreach (['US', 'PK'] as $geo) {
+            try {
+                $response = Http::timeout(20)->get('https://trends.google.com/trending/rss', ['geo' => $geo]);
+                if (!$response->successful()) continue;
+                preg_match_all('/<item>.*?<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>.*?<\/item>/s', $response->body(), $matches);
+                $topics = array_merge($topics, array_map('trim', $matches[1] ?? []));
+            } catch (\Throwable $e) {
+                report($e);
+            }
         }
-        if (!$topic) return self::FAILURE;
+        $allowed = ['video', 'download', 'reel', 'tiktok', 'instagram', 'youtube', 'facebook', 'pinterest', 'whatsapp', 'vimeo', 'dailymotion', 'media', 'mp4', 'audio', 'streaming', 'watermark'];
+        $topic = $this->firstUncoveredTopic($topics, $allowed);
+
+        // General daily Trends often has no media-related searches. Ask Google's
+        // live autocomplete for related searches instead of inventing a topic.
+        if (!$topic) {
+            $suggestions = [];
+            $queries = [
+                'youtube video save', 'youtube shorts save', 'instagram reels video',
+                'facebook reels video', 'tiktok video quality', 'pinterest video pin',
+                'whatsapp status video', 'dailymotion video', 'twitter video save',
+            ];
+            foreach ($queries as $query) {
+                try {
+                    $response = Http::timeout(12)->get('https://suggestqueries.google.com/complete/search', [
+                        'client' => 'firefox', 'q' => $query,
+                    ]);
+                    if (!$response->successful()) continue;
+                    $items = $response->json('1', []);
+                    if (is_array($items)) $suggestions = array_merge($suggestions, $items);
+                } catch (\Throwable $e) {
+                    report($e);
+                }
+            }
+            $topic = $this->firstUncoveredTopic($suggestions, $allowed);
+            if (!$topic) {
+                $this->error('Google Trends had no relevant media trend, and Google suggestions returned no uncovered media topic. No blog was generated.');
+                return self::FAILURE;
+            }
+            $this->line('Google Trends had no matching topic; selected an uncovered query from Google Search Suggestions.');
+        }
 
         $prompt = "Write a helpful, original 1000-word SEO blog about the public-media topic: {$topic}. Return ONLY valid JSON with keys title, excerpt, meta_title, meta_description, category, content, image_alt. Content must be safe, factual, HTML with h2/p/ul, and mention permission/copyright. Add 1-3 natural internal links in the HTML content to relevant Solution Hub platform pages using these exact URLs: https://solutionhub.digital/youtube-video-downloader, https://solutionhub.digital/tiktok-video-downloader, https://solutionhub.digital/instagram-video-downloader, https://solutionhub.digital/facebook-video-downloader, https://solutionhub.digital/pinterest-video-downloader, and https://solutionhub.digital/supported-platforms. Do not invent statistics or news.";
         $response = Http::timeout(90)->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key='.urlencode((string) config('services.gemini.key')), ['contents'=>[['parts'=>[['text'=>$prompt]]]]]);
@@ -57,5 +74,34 @@ class GenerateTrendingBlog extends Command
         File::put(public_path($image), '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675"><rect width="1200" height="675" fill="#101827"/><circle cx="980" cy="120" r="300" fill="#3668de" opacity=".5"/><text x="70" y="180" fill="#39e1b6" font-family="Arial" font-size="28">SOLUTION HUB GUIDE</text><text x="70" y="270" fill="white" font-family="Arial" font-size="48" font-weight="700">'.e(Str::limit($data['title'], 42)).'</text></svg>');
         BlogPost::create(['title'=>$data['title'],'slug'=>$slug,'category'=>$data['category'] ?? 'Guide','excerpt'=>$data['excerpt'] ?? Str::limit(strip_tags($data['content']), 180),'meta_title'=>$data['meta_title'] ?? $data['title'],'meta_description'=>$data['meta_description'] ?? Str::limit(strip_tags($data['excerpt'] ?? ''),155),'content'=>$data['content'],'image'=>$image,'image_alt'=>$data['image_alt'] ?? $data['title'],'read_minutes'=>5,'is_published'=>(bool)$this->option('publish'),'published_at'=>$this->option('publish') ? now() : null]);
         $this->info("Created: {$slug}"); return self::SUCCESS;
+    }
+
+    private function firstUncoveredTopic(array $topics, array $allowed): ?string
+    {
+        $existingTitles = BlogPost::pluck('title')->map(function ($title) {
+            return preg_replace('/[^a-z0-9]+/i', ' ', strtolower($title));
+        });
+
+        foreach ($topics as $candidate) {
+            $topic = trim(html_entity_decode(strip_tags((string) $candidate), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            $normalized = preg_replace('/[^a-z0-9]+/i', ' ', strtolower($topic));
+            $words = array_values(array_unique(array_filter(explode(' ', $normalized), function ($word) {
+                return strlen($word) > 2 && !in_array($word, ['how', 'the', 'for', 'and', 'with', 'from', 'your', 'into'], true);
+            })));
+
+            if (strlen($topic) < 8 || count($words) < 2) continue;
+            if (!collect($allowed)->contains(fn ($word) => str_contains($normalized, $word))) continue;
+
+            $covered = $existingTitles->contains(function ($title) use ($normalized, $words) {
+                if (str_contains($title, $normalized) || str_contains($normalized, $title)) return true;
+                $titleWords = array_unique(array_filter(explode(' ', $title), fn ($word) => strlen($word) > 2));
+                $overlap = count(array_intersect($words, $titleWords)) / max(1, count(array_unique(array_merge($words, $titleWords))));
+                return $overlap >= 0.55;
+            });
+
+            if (!$covered) return $topic;
+        }
+
+        return null;
     }
 }
