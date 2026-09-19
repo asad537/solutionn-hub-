@@ -88,7 +88,8 @@ class AdminController extends Controller
             $message = 'Trending blog generation started. Refresh after about 2 minutes.';
         } else {
             $exitCode = Artisan::call('blog:generate-trending', ['--publish' => true]);
-            $message = trim(Artisan::output()) ?: ($exitCode === 0 ? 'Trending blog generation finished.' : 'No new relevant topic was available. Please try again.');
+            $message = trim(Artisan::output()) ?: ($exitCode === 0 ? 'Trending blog generation finished.' : 'Blog generation failed. Check the generator log for details.');
+            return redirect()->route('admin.dashboard')->with($exitCode === 0 ? 'success' : 'error', $message);
         }
         return redirect()->route('admin.dashboard')->with('success', $message);
     }

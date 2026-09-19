@@ -99,11 +99,18 @@ class GenerateTrendingBlog extends Command
             }
 
             if ($response->successful() || ($response->status() < 500 && $response->status() !== 429)) break;
-            if ($attempt < 3) sleep($attempt);
+            if ($attempt < 3) {
+                sleep($response->status() === 429 ? $this->retryDelaySeconds($response, $attempt) : $attempt);
+            }
         }
         if (!$response || !$response->successful()) {
             $reason = $response ? $response->json('error.message', 'No error detail returned') : 'No response received';
-            $this->error('Gemini request failed'.($response ? ' (HTTP '.$response->status().')' : '').': '.Str::limit($reason, 400));
+            if ($response && $response->status() === 429) {
+                $delay = $this->retryDelaySeconds($response, 0);
+                $this->error('Gemini rate limit/quota reached (HTTP 429). No blog was created or published. '.($delay ? 'Google suggests waiting about '.$delay.' seconds before trying again. ' : '').'Check the project limits and usage in Google AI Studio. Details: '.Str::limit($reason, 260));
+            } else {
+                $this->error('Gemini request failed'.($response ? ' (HTTP '.$response->status().')' : '').': '.Str::limit($reason, 400));
+            }
             return self::FAILURE;
         }
         $text = $response->json('candidates.0.content.parts.0.text', '');
@@ -173,6 +180,26 @@ class GenerateTrendingBlog extends Command
         }
 
         return null;
+    }
+
+    private function retryDelaySeconds($response, int $default): int
+    {
+        $retryAfter = $response->header('Retry-After');
+        if (is_numeric($retryAfter)) return min(15, max(1, (int) ceil((float) $retryAfter)));
+
+        foreach ($response->json('error.details', []) as $detail) {
+            $delay = $detail['retryDelay'] ?? null;
+            if (is_string($delay) && preg_match('/^([0-9.]+)s$/', $delay, $matches)) {
+                return min(15, max(1, (int) ceil((float) $matches[1])));
+            }
+        }
+
+        $message = (string) $response->json('error.message', '');
+        if (preg_match('/retry in ([0-9.]+)s/i', $message, $matches)) {
+            return min(15, max(1, (int) ceil((float) $matches[1])));
+        }
+
+        return $default > 0 ? min(15, max(1, $default)) : 0;
     }
 
     private function makeThumbnailSvg(string $title, string $slug): string

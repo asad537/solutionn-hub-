@@ -131,6 +131,12 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if(session('error'))
+            <div style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:#fca5a5;padding:.9rem 1.1rem;border-radius:10px;margin-bottom:1rem;white-space:pre-line">
+                <i class="fas fa-circle-exclamation"></i>
+                {{ session('error') }}
+            </div>
+        @endif
 
         @yield('content')
     </div>
@@ -139,6 +145,5 @@
 @stack('scripts')
 </body>
 </html>
-
 
 
