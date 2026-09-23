@@ -25,6 +25,8 @@ return [
     ],
     'gemini' => [
         'key' => env('GEMINI_API_KEY'),
+        'text_model' => env('GEMINI_TEXT_MODEL', 'gemini-2.5-flash'),
+        'text_fallback_model' => env('GEMINI_TEXT_FALLBACK_MODEL', 'gemini-3.6-flash'),
         'image_model' => env('GEMINI_IMAGE_MODEL', 'gemini-3.1-flash-image'),
         'image_generation_enabled' => env('GEMINI_IMAGE_GENERATION_ENABLED', false),
     ],

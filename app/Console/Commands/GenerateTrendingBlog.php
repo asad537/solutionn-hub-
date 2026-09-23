@@ -86,28 +86,40 @@ class GenerateTrendingBlog extends Command
 
         $prompt = "Write a helpful, original 1000-word SEO blog about this public-media topic: {$topic}. The target platform is {$selectedPlatform['label']}. The article MUST be specifically about {$selectedPlatform['label']} and include the platform name naturally in the title; do not switch to YouTube or write a generic all-platform article. Return ONLY valid JSON with keys title, excerpt, meta_title, meta_description, category, content, image_alt. Content must be safe, factual, HTML with h2/p/ul, and mention permission/copyright. Add 1-3 natural internal links in the HTML content to relevant Solution Hub platform pages using these exact URLs: https://solutionhub.digital/youtube-video-downloader, https://solutionhub.digital/tiktok-video-downloader, https://solutionhub.digital/instagram-video-downloader, https://solutionhub.digital/facebook-video-downloader, https://solutionhub.digital/pinterest-video-downloader, and https://solutionhub.digital/supported-platforms. Do not invent statistics or news.";
         $response = null;
-        for ($attempt = 1; $attempt <= 3; $attempt++) {
-            try {
-                $response = Http::timeout(90)->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key='.urlencode((string) config('services.gemini.key')), ['contents'=>[['parts'=>[['text'=>$prompt]]]]]);
-            } catch (\Throwable $e) {
-                if ($attempt === 3) {
-                    $this->error('Gemini connection failed after 3 attempts: '.$e->getMessage());
-                    return self::FAILURE;
+        $models = array_values(array_unique(array_filter([
+            config('services.gemini.text_model', 'gemini-2.5-flash'),
+            config('services.gemini.text_fallback_model', 'gemini-3.6-flash'),
+        ])));
+        foreach ($models as $model) {
+            for ($attempt = 1; $attempt <= 4; $attempt++) {
+                try {
+                    $response = Http::timeout(90)->post('https://generativelanguage.googleapis.com/v1beta/models/'.urlencode($model).':generateContent?key='.urlencode((string) config('services.gemini.key')), ['contents'=>[['parts'=>[['text'=>$prompt]]]]]);
+                } catch (\Throwable $e) {
+                    if ($attempt === 4) break;
+                    sleep(min(20, 2 ** ($attempt - 1)));
+                    continue;
                 }
-                sleep($attempt);
-                continue;
-            }
 
-            if ($response->successful() || ($response->status() < 500 && $response->status() !== 429)) break;
-            if ($attempt < 3) {
-                sleep($response->status() === 429 ? $this->retryDelaySeconds($response, $attempt) : $attempt);
+                if ($response->successful()) break 2;
+                // 503 is temporary model capacity pressure; give it a few
+                // progressively longer retries before switching models.
+                if (in_array($response->status(), [429, 500, 502, 503, 504], true) && $attempt < 4) {
+                    sleep($response->status() === 429 ? $this->retryDelaySeconds($response, $attempt) : min(20, 2 ** $attempt));
+                    continue;
+                }
+                break;
             }
+            if ($response && $response->successful()) break;
+            if ($response && $response->status() === 429) break;
+            $this->line('Gemini model '.$model.' unavailable; trying the fallback model.');
         }
         if (!$response || !$response->successful()) {
             $reason = $response ? $response->json('error.message', 'No error detail returned') : 'No response received';
             if ($response && $response->status() === 429) {
                 $delay = $this->retryDelaySeconds($response, 0);
                 $this->error('Gemini rate limit/quota reached (HTTP 429). No blog was created or published. '.($delay ? 'Google suggests waiting about '.$delay.' seconds before trying again. ' : '').'Check the project limits and usage in Google AI Studio. Details: '.Str::limit($reason, 260));
+            } elseif ($response && $response->status() === 503) {
+                $this->error('Gemini is temporarily overloaded (HTTP 503). No blog was created or published after retries; please try again later. Details: '.Str::limit($reason, 260));
             } else {
                 $this->error('Gemini request failed'.($response ? ' (HTTP '.$response->status().')' : '').': '.Str::limit($reason, 400));
             }
