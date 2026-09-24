@@ -160,6 +160,10 @@ class GenerateTrendingBlog extends Command
             $this->error('Gemini suggested a title already used by another blog; skipped to prevent a duplicate.');
             return self::FAILURE;
         }
+        if ($this->isNearDuplicateTitle($data['title'])) {
+            $this->error('Gemini suggested a title too similar to an existing blog; skipped to prevent duplicate content.');
+            return self::FAILURE;
+        }
         $image = $this->generateArticleImage($data, $slug) ?? '/images/blog/generated/'.$slug.'.svg';
         File::ensureDirectoryExists(public_path('images/blog/generated'));
         if (str_ends_with($image, '.svg')) {
@@ -211,6 +215,21 @@ class GenerateTrendingBlog extends Command
         }
 
         return null;
+    }
+
+    private function isNearDuplicateTitle(string $candidate): bool
+    {
+        $stopWords = ['the', 'and', 'for', 'with', 'from', 'how', 'what', 'your', 'guide', 'complete', 'best', 'safe', 'online'];
+        $candidateWords = array_values(array_diff(array_unique(array_filter(preg_split('/[^a-z0-9]+/i', strtolower($candidate)))), $stopWords));
+        if (count($candidateWords) < 3) return false;
+
+        foreach (BlogPost::pluck('title') as $existing) {
+            $existingWords = array_values(array_diff(array_unique(array_filter(preg_split('/[^a-z0-9]+/i', strtolower($existing)))), $stopWords));
+            $overlap = count(array_intersect($candidateWords, $existingWords)) / max(1, min(count($candidateWords), count($existingWords)));
+            if ($overlap >= 0.60) return true;
+        }
+
+        return false;
     }
 
     private function latestPlatformKey(array $platforms): ?string
