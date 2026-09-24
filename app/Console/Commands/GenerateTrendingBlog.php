@@ -46,6 +46,8 @@ class GenerateTrendingBlog extends Command
         $topic = null;
         $selectedPlatform = null;
         $usedSuggestions = false;
+        $fallbackTopic = null;
+        $fallbackPlatform = null;
         foreach ($platformKeys as $platformKey) {
             $platform = $platforms[$platformKey];
             $topic = $this->firstUncoveredTopic($topics, $platform['terms']);
@@ -70,6 +72,10 @@ class GenerateTrendingBlog extends Command
                 }
             }
             $topic = $this->firstUncoveredTopic($suggestions, $platform['terms']);
+            if (!$fallbackTopic) {
+                $fallbackTopic = $this->firstMatchingTopic($suggestions, $platform['terms']);
+                $fallbackPlatform = $platform;
+            }
             if ($topic) {
                 $selectedPlatform = $platform;
                 $usedSuggestions = true;
@@ -77,8 +83,19 @@ class GenerateTrendingBlog extends Command
             }
         }
 
+        // Every platform can eventually be covered by existing posts. Keep
+        // the automation running by reusing the live suggestion as a new
+        // angle; Gemini is instructed to write a distinct article, and the
+        // final slug check still prevents exact duplicates.
+        if (!$topic && $fallbackTopic && $fallbackPlatform) {
+            $topic = $fallbackTopic;
+            $selectedPlatform = $fallbackPlatform;
+            $usedSuggestions = true;
+            $this->line('All suggested topics were already covered; using a fresh angle from Google Search Suggestions.');
+        }
+
         if (!$topic || !$selectedPlatform) {
-            $this->error('Google Trends and Search Suggestions returned no uncovered topic for any supported video platform. No blog was generated.');
+            $this->error('Google Trends and Search Suggestions returned no usable topic for any supported video platform. No blog was generated.');
             return self::FAILURE;
         }
         if ($usedSuggestions) $this->line('Selected an uncovered Google Search Suggestion for '.$selectedPlatform['label'].'.');
@@ -177,6 +194,20 @@ class GenerateTrendingBlog extends Command
             });
 
             if (!$covered) return $topic;
+        }
+
+        return null;
+    }
+
+    private function firstMatchingTopic(array $topics, array $platformTerms): ?string
+    {
+        foreach ($topics as $candidate) {
+            $topic = trim(html_entity_decode(strip_tags((string) $candidate), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            $normalized = preg_replace('/[^a-z0-9]+/i', ' ', strtolower($topic));
+            $words = array_filter(explode(' ', $normalized), fn ($word) => strlen($word) > 2);
+            if (strlen($topic) >= 8 && count($words) >= 2 && collect($platformTerms)->contains(fn ($word) => str_contains($normalized, $word))) {
+                return $topic;
+            }
         }
 
         return null;
