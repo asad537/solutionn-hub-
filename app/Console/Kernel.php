@@ -15,7 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('blog:generate-trending --publish')->dailyAt('16:55')->timezone('Asia/Karachi')->withoutOverlapping();
+        // Generate a draft for editorial review. Auto-publishing repetitive
+        // pages can dilute the site's topical quality and crawl budget.
+        $schedule->command('blog:generate-trending')->dailyAt('16:55')->timezone('Asia/Karachi')->withoutOverlapping();
     }
 
     /**
