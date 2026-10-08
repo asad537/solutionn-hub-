@@ -294,6 +294,17 @@ Route::permanentRedirect('/privacy-policy/', '/privacy');
 Route::permanentRedirect('/terms-of-service', '/terms');
 Route::permanentRedirect('/terms-of-service/', '/terms');
 
+// Format-specific landing pages backed by the verified platform analyzers.
+Route::get('/youtube-shorts-downloader', [PlatformController::class, 'showAlias'])
+    ->defaults('alias', 'youtube-shorts-downloader')->defaults('baseSlug', 'youtube-video-downloader')
+    ->name('youtube.shorts');
+Route::get('/instagram-reels-downloader', [PlatformController::class, 'showAlias'])
+    ->defaults('alias', 'instagram-reels-downloader')->defaults('baseSlug', 'instagram-video-downloader')
+    ->name('instagram.reels');
+Route::get('/facebook-reels-downloader', [PlatformController::class, 'showAlias'])
+    ->defaults('alias', 'facebook-reels-downloader')->defaults('baseSlug', 'facebook-video-downloader')
+    ->name('facebook.reels');
+
 // ── Analyze / Download (existing hd-video-downloadr logic) ───────────────────
 Route::post('/analyze', function (Request $request) {
     $platformsList = [
@@ -650,6 +661,9 @@ Route::get('/sitemap.xml', function () {
         ['loc' => route('about'), 'lastmod' => null, 'changefreq' => 'yearly', 'priority' => '0.4'],
         ['loc' => route('contact'), 'lastmod' => null, 'changefreq' => 'yearly', 'priority' => '0.4'],
         ['loc' => route('dmca'), 'lastmod' => null, 'changefreq' => 'yearly', 'priority' => '0.3'],
+        ['loc' => route('youtube.shorts'), 'lastmod' => null, 'changefreq' => 'weekly', 'priority' => '0.7'],
+        ['loc' => route('instagram.reels'), 'lastmod' => null, 'changefreq' => 'weekly', 'priority' => '0.7'],
+        ['loc' => route('facebook.reels'), 'lastmod' => null, 'changefreq' => 'weekly', 'priority' => '0.7'],
     ];
 
     return response()->view('sitemap', [

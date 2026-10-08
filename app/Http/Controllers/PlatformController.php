@@ -122,6 +122,20 @@ class PlatformController extends Controller
         return view('platforms.show', compact('platform', 'faqs', 'settings', 'blogs'));
     }
 
+    /** Render a supported format-specific landing page using the real platform analyzer. */
+    public function showAlias($alias, $baseSlug)
+    {
+        $platform = Platform::where('slug', $baseSlug)->where('status', 'active')->firstOrFail();
+        $platform->slug = $alias;
+        $faqs = DB::table('faqs')->where('page', $baseSlug)->orderBy('sort_order')->get();
+        if ($faqs->isEmpty()) {
+            $faqs = DB::table('faqs')->where('page', 'home')->where('is_active', true)->orderBy('sort_order')->get();
+        }
+        $settings = DB::table('homepage_settings')->first();
+        $blogs = \App\Models\Blog::where('status', 1)->latest()->limit(4)->get();
+        return view('platforms.show', compact('platform', 'faqs', 'settings', 'blogs'));
+    }
+
     public function faqStore(Request $request, $id)
     {
         if (!session('admin_logged_in')) return redirect()->route('admin.login');

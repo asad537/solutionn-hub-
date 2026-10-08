@@ -10,6 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @php
         $platformSeo = [
+            'youtube-shorts-downloader' => ['title' => 'YouTube Shorts Downloader – Download Shorts Online', 'description' => 'Download supported public YouTube Shorts online in available quality. Fast browser-based YouTube Shorts downloader with no software required.', 'h1' => 'YouTube Shorts Downloader'],
+            'instagram-reels-downloader' => ['title' => 'Instagram Reels Downloader – Download Reels in HD', 'description' => 'Download supported public Instagram Reels online in HD. Free browser-based Instagram Reels downloader for mobile and desktop.', 'h1' => 'Instagram Reels Downloader'],
+            'facebook-reels-downloader' => ['title' => 'Facebook Reels Downloader – Download Facebook Reels', 'description' => 'Download supported public Facebook Reels online. Fast and free Facebook Reels downloader for mobile and desktop browsers.', 'h1' => 'Facebook Reels Downloader'],
             'youtube-video-downloader' => ['title' => 'YouTube Video Downloader – Download YouTube Videos in HD', 'description' => 'Download supported public YouTube videos online in available HD formats. Fast browser-based YouTube video downloader with no software required.', 'h1' => 'YouTube Video Downloader'],
             'instagram-video-downloader' => ['title' => 'Instagram Video Downloader – Download Reels & Videos in HD', 'description' => 'Download public Instagram videos and Reels online in HD. Free Instagram video downloader for iPhone, Android, PC and Mac.', 'h1' => 'Instagram Video Downloader'],
             'tiktok-video-downloader' => ['title' => 'TikTok Video Downloader – Download TikTok Videos in HD', 'description' => 'Download public TikTok videos online in HD. Fast, free browser-based TikTok downloader with available video quality options.', 'h1' => 'TikTok Video Downloader'],
