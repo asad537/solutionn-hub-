@@ -97,7 +97,13 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "{{ $platform->name }} Public Link Guide",
+          "name": "Video Downloaders",
+          "item": "{{ route('platforms') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ $seoH1 }}",
           "item": "{{ route('platforms.show', $platform->slug) }}"
         }
       ]
@@ -834,6 +840,11 @@
     <!-- Hero Section — dark homepage style -->
     <section class="platform-hero">
         <div class="platform-hero-wrap">
+            <nav class="breadcrumb" aria-label="Breadcrumb" style="margin-bottom:18px;">
+                <a href="{{ route('home') }}">Home</a><span aria-hidden="true">›</span>
+                <a href="{{ route('platforms') }}">Video Downloaders</a><span aria-hidden="true">›</span>
+                <span aria-current="page">{{ $seoH1 }}</span>
+            </nav>
             <span class="platform-hero-badge"><i class="fas fa-rocket"></i> Supported Platforms</span>
             <h1>{{ $seoH1 }}</h1>
             <p>{{ $seoDescription }}</p>

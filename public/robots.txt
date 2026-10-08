@@ -1,6 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /api/
+Disallow: /login
+Disallow: /register
 Disallow: /analyze
 Disallow: /download-file
 Disallow: /prepare-plugin-download
