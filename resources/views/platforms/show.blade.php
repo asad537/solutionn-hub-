@@ -8,18 +8,34 @@
     @include('partials.favicons')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $platform->meta_title ?: $platform->name . ' - Video Saver' }}</title>
-    <meta name="description" content="{{ $platform->meta_description }}">
+    @php
+        $platformSeo = [
+            'youtube-video-downloader' => ['title' => 'YouTube Video Downloader – Download YouTube Videos in HD', 'description' => 'Download supported public YouTube videos online in available HD formats. Fast browser-based YouTube video downloader with no software required.', 'h1' => 'YouTube Video Downloader'],
+            'instagram-video-downloader' => ['title' => 'Instagram Video Downloader – Download Reels & Videos in HD', 'description' => 'Download public Instagram videos and Reels online in HD. Free Instagram video downloader for iPhone, Android, PC and Mac.', 'h1' => 'Instagram Video Downloader'],
+            'tiktok-video-downloader' => ['title' => 'TikTok Video Downloader – Download TikTok Videos in HD', 'description' => 'Download public TikTok videos online in HD. Fast, free browser-based TikTok downloader with available video quality options.', 'h1' => 'TikTok Video Downloader'],
+            'facebook-video-downloader' => ['title' => 'Facebook Video Downloader – Download Facebook Videos in HD', 'description' => 'Download public Facebook videos online in available HD quality. Free browser-based Facebook video downloader for mobile and desktop.', 'h1' => 'Facebook Video Downloader'],
+            'twitter-video-downloader' => ['title' => 'Twitter Video Downloader – Download X Videos Online', 'description' => 'Download public videos from Twitter/X online. Fast browser-based Twitter video downloader with available quality options.', 'h1' => 'Twitter Video Downloader'],
+            'vimeo-video-downloader' => ['title' => 'Vimeo Video Downloader – Download Public Vimeo Videos', 'description' => 'Download supported public Vimeo videos online in available quality. Fast browser-based Vimeo video downloader with no software required.', 'h1' => 'Vimeo Video Downloader'],
+            'dailymotion-video-downloader' => ['title' => 'Dailymotion Video Downloader – Download Videos Online', 'description' => 'Download supported public Dailymotion videos online. Fast and free browser-based Dailymotion video downloader with no software required.', 'h1' => 'Dailymotion Video Downloader'],
+            'pinterest-video-downloader' => ['title' => 'Pinterest Video Downloader – Download Pinterest Videos', 'description' => 'Download supported public Pinterest videos online in available quality. Free browser-based Pinterest video downloader for mobile and desktop.', 'h1' => 'Pinterest Video Downloader'],
+        ];
+        $seo = $platformSeo[$platform->slug] ?? [];
+        $seoTitle = $seo['title'] ?? ($platform->meta_title ?: $platform->name . ' Video Downloader | Solution Hub');
+        $seoDescription = $seo['description'] ?? ($platform->meta_description ?: 'Download supported public ' . $platform->name . ' videos online in available quality.');
+        $seoH1 = $seo['h1'] ?? ($platform->h1 ?: $platform->name . ' Video Downloader');
+    @endphp
+    <title>{{ $seoTitle }}</title>
+    <meta name="description" content="{{ $seoDescription }}">
     <link rel="canonical" href="{{ route('platforms.show', $platform->slug) }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Solution Hub">
-    <meta property="og:title" content="{{ $platform->meta_title ?: $platform->name . ' Public Link Format Guide | Solution Hub' }}">
-    <meta property="og:description" content="{{ $platform->meta_description ?: 'Analyze public ' . $platform->name . ' links and review source-dependent media formats.' }}">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDescription }}">
     <meta property="og:url" content="{{ route('platforms.show', $platform->slug) }}">
     <meta property="og:image" content="{{ asset('images/logo-hafiz.svg') }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $platform->meta_title ?: $platform->name . ' Public Link Format Guide' }}">
-    <meta name="twitter:description" content="{{ $platform->meta_description ?: 'Analyze public ' . $platform->name . ' links and review source-dependent media formats.' }}">
+    <meta name="twitter:title" content="{{ $seoTitle }}">
+    <meta name="twitter:description" content="{{ $seoDescription }}">
     <meta name="twitter:image" content="{{ asset('images/logo-hafiz.svg') }}">
     @if($platform->meta_keywords)
     <meta name="keywords" content="{{ $platform->meta_keywords }}">
@@ -819,8 +835,8 @@
     <section class="platform-hero">
         <div class="platform-hero-wrap">
             <span class="platform-hero-badge"><i class="fas fa-rocket"></i> Supported Platforms</span>
-            <h1>{{ $platform->h1 ?: $platform->name . ' Public Link Format Guide' }}</h1>
-            <p>{{ $platform->description ?: 'Analyze supported public ' . $platform->name . ' links and review source-dependent video and audio formats.' }}</p>
+            <h1>{{ $seoH1 }}</h1>
+            <p>{{ $seoDescription }}</p>
         </div>
     </section>
     <div class="download-panel-wrap">

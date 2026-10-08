@@ -9,11 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @php $seo = \App\Models\PageSeo::getFor('faqs'); @endphp
-    <title>{{ $seo->meta_title ?? ($settings->faq_meta_title ?? 'Frequently Asked Questions | Solution Hub') }}</title>
+    <title>{{ $seo->meta_title ?? 'Video Downloader FAQs – Common Questions | Solution Hub' }}</title>
     @if($seo && $seo->meta_description)
     <meta name="description" content="{{ $seo->meta_description }}">
     @else
-    <meta name="description" content="{{ $settings->faq_meta_description ?? 'Find clear answers about supported public video links, available formats, device compatibility, troubleshooting, privacy, and responsible use.' }}">
+    <meta name="description" content="{{ $settings->faq_meta_description ?? 'Find answers about Solution Hub, supported platforms, video quality, downloads, privacy, accounts, mobile devices and public video links.' }}">
     @endif
     @if($seo && $seo->meta_keywords)
     <meta name="keywords" content="{{ $seo->meta_keywords }}">

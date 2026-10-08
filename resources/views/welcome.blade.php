@@ -6,34 +6,34 @@
     @php
         $siteName = $siteSettings['site_name'] ?? 'Solution Hub';
         $staticTitles = [
-            'platforms' => 'Supported Video Platforms | Solution Hub',
+            'platforms' => 'Supported Video Download Platforms | Solution Hub',
             'blog' => 'Video Download Guides & Tips | Solution Hub',
             'privacy' => 'Privacy Policy | Solution Hub',
             'terms' => 'Terms of Service | Solution Hub',
             'disclaimer' => 'Disclaimer | Solution Hub',
-            'about' => 'About Solution Hub | Our Purpose & Standards',
-            'contact' => 'Contact Solution Hub | Help & Website Feedback',
-            'dmca' => 'DMCA & Copyright Policy | Solution Hub',
+            'about' => 'About Solution Hub – Online Video Downloader',
+            'contact' => 'Contact Solution Hub – Support & Questions',
+            'dmca' => 'DMCA Policy | Solution Hub',
         ];
         $staticDescriptions = [
-            'platforms' => 'Explore the public video platforms supported by Solution Hub and open a dedicated downloader page.',
+            'platforms' => 'See the video platforms supported by Solution Hub, including YouTube, Instagram, Facebook, TikTok, X, Vimeo, Dailymotion and Pinterest.',
             'blog' => 'Read practical guides about public video links, formats, quality, compatibility, and responsible downloading.',
             'privacy' => 'Learn how Solution Hub handles submitted links, temporary processing, privacy, and data protection.',
             'terms' => 'Review the terms governing responsible use of Solution Hub and its public-link analysis tools.',
             'disclaimer' => 'Read important legal information about Solution Hub, third-party platforms, copyright, and responsible use.',
-            'about' => 'Learn about Solution Hub, our public-link tools, responsible-use standards, and commitment to user privacy.',
-            'contact' => 'Find help for technical issues, privacy questions, website feedback, and copyright concerns related to Solution Hub.',
+            'about' => 'Learn about Solution Hub, our browser-based video downloading tool, privacy approach, supported public media and responsible-use principles.',
+            'contact' => 'Contact Solution Hub for technical support, broken links, privacy questions, copyright notices and general enquiries.',
             'dmca' => 'Read the Solution Hub copyright policy and learn how rights holders can submit a complete removal notice.',
         ];
         $pageTitle = $page === 'blog-post'
             ? ($post['meta_title'] ?? (($post['title'] ?? 'Guide') . ' | ' . $siteName))
             : ($page === 'home'
-                ? (!empty($homeSeo->meta_title) ? $homeSeo->meta_title : 'Solution Hub - Public Media Link Analyzer')
+                ? (!empty($homeSeo->meta_title) ? $homeSeo->meta_title : 'Online Video Downloader – Download Videos in HD | Solution Hub')
                 : ($staticTitles[$page] ?? ucwords(str_replace('-', ' ', $page)) . ' | Solution Hub'));
         $pageDescription = $page === 'blog-post'
             ? ($post['description'] ?? $post['excerpt'] ?? '')
             : ($page === 'home'
-                ? (!empty($homeSeo->meta_description) ? $homeSeo->meta_description : ($siteSettings['default_meta_description'] ?? 'Solution Hub is a public media link analyzer.'))
+                ? (!empty($homeSeo->meta_description) ? $homeSeo->meta_description : 'Download public videos online in HD from supported platforms. Fast, free and browser-based video downloader with no software or account required.')
                 : ($staticDescriptions[$page] ?? ($siteSettings['default_meta_description'] ?? 'Analyze supported public video links and review available media formats.')));
         $pageUrl = $page === 'blog-post' ? route('blog.show', $post['slug']) : url()->current();
         $pageImage = $page === 'blog-post' ? asset($post['image']) : asset('/images/blog/generated/001-youtube-video-downloader-safe-hd-mp4-guide.svg');
@@ -2378,7 +2378,7 @@
                             Browser-based · No software
                         </span>
                         @php 
-                            $heroTitle = !empty($homeSettings->hero_heading) ? $homeSettings->hero_heading : ($siteSettings['hero_title'] ?? 'Analyze Public Media Links');
+                            $heroTitle = !empty($homeSettings->hero_heading) ? $homeSettings->hero_heading : 'Online Video Downloader – Download Videos in HD';
                             $lastSpace = strrpos($heroTitle, ' ');
                             if ($lastSpace !== false) {
                                 $titleFirst = substr($heroTitle, 0, $lastSpace);
@@ -2388,7 +2388,7 @@
                                 $titleLast = '';
                             }
                             
-                            $heroDesc = !empty($homeSettings->hero_description) ? $homeSettings->hero_description : ($siteSettings['hero_subtitle'] ?? 'Review formats made available by supported public sources. Use this tool only for content you own or have permission to save.');
+                            $heroDesc = !empty($homeSettings->hero_description) ? $homeSettings->hero_description : 'Solution Hub is a browser-based tool for processing supported public video links. Available resolutions, formats and download options depend on the original media and platform. Use content you own or have permission to save.';
                             $parsedDesc = $heroDesc;
                             if (strpos(trim($heroDesc), '{') === 0 && strpos($heroDesc, '"blocks"') !== false) {
                                 $descData = json_decode($heroDesc, true);
@@ -2719,8 +2719,8 @@
                         <a href="{{ route('home') }}">Home</a><span class="breadcrumb-separator">/</span><span>Supported Platforms</span>
                     </nav>
                     <span class="blog-badge">Integrations</span>
-                    <h1>Analyze Public <span>Media Links</span></h1>
-                    <p>Solution Hub helps review source-dependent formats from supported public social networks and video platforms.</p>
+                    <h1>Supported Video Download <span>Platforms</span></h1>
+                    <p>See the video platforms supported by Solution Hub and open a dedicated browser-based downloader.</p>
                 </div>
             </div>
             @include('partials.platforms')
