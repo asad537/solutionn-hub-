@@ -2422,7 +2422,7 @@
                                     <input id="video-url-input" name="video_url" type="url" value="{{ old('video_url') }}" placeholder="Paste a video URL here" aria-label="Video URL" required>
                                 </span>
                                 <button id="analyze-btn" class="button" type="submit">
-                                    <span class="download-label">{{ $result ? 'Analyze' : 'Analyze Link' }}</span>
+                                    <span class="download-label">{{ $result ? 'Get Download Options' : 'Get Download Options' }}</span>
                                     <svg class="button-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
                                 </button>
                             </form>
@@ -2482,7 +2482,7 @@
                             <span class="how-step-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
                             </span>
-                            <h3>Analyze Link</h3>
+                            <h3>Get Download Options</h3>
                             <p>We analyze the link and fetch available formats and quality options.</p>
                         </article>
                         <span class="how-step-arrow" aria-hidden="true"><svg viewBox="0 0 28 16"><path d="M1 8h24M20 3l5 5-5 5"/></svg></span>
@@ -3000,9 +3000,10 @@
         
         async function fetchResult(url) {
             if (!url || !/^https?:\/\//i.test(url)) return;
+            if (typeof gtag === 'function') gtag('event', 'processing_started');
             if (analyzeBtn) {
                 analyzeBtn.disabled = true;
-                analyzeBtn.innerHTML = '<svg style="display:inline-block;vertical-align:middle;margin-right:8px;animation:spin 1s linear infinite" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg><span>Analyzing...</span>';
+                analyzeBtn.innerHTML = '<svg style="display:inline-block;vertical-align:middle;margin-right:8px;animation:spin 1s linear infinite" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg><span>Checking URL...</span>';
             }
             if (errorContainer) {
                 errorContainer.style.display = 'none';
@@ -3016,7 +3017,7 @@
                 resultContainer.innerHTML = `
                     <div class="loader-container result-fade-in">
                         <div class="spinner"></div>
-                        <div class="loader-text">Analyzing link and fetching formats...</div>
+                        <div class="loader-text">Fetching video information...</div>
                     </div>
                 `;
             }
@@ -3037,24 +3038,26 @@
                 
                 const data = await response.json();
                 if (data.success) {
+                    if (typeof gtag === 'function') gtag('event', 'processing_success');
                     if (resultContainer) resultContainer.innerHTML = `<div class="result-fade-in">${data.html}</div>`;
                 } else {
+                    if (typeof gtag === 'function') gtag('event', 'processing_failed');
                     if (errorContainer) {
-                        errorContainer.innerText = data.error || 'Failed to retrieve video data.';
+                        errorContainer.innerText = 'We couldn\'t process this URL. Please check that the link is public and try again.';
                         errorContainer.style.display = 'block';
                     }
                     document.querySelector('.download-panel').classList.remove('has-result');
                 }
             } catch (error) {
                 if (errorContainer) {
-                    errorContainer.innerText = 'An error occurred while connecting to the server.';
+                    errorContainer.innerText = 'We couldn\'t process the video right now. Please try again.';
                     errorContainer.style.display = 'block';
                 }
                 document.querySelector('.download-panel').classList.remove('has-result');
             } finally {
                 if (analyzeBtn) {
                     analyzeBtn.disabled = false;
-                    analyzeBtn.innerHTML = '<svg class="download-icon" style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><span>Analyze</span>';
+                    analyzeBtn.innerHTML = '<svg class="download-icon" style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg><span>Get Download Options</span>';
                 }
             }
         }

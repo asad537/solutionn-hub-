@@ -878,7 +878,7 @@
                     <input id="video-url-input" name="video_url" type="url" value="{{ old('video_url') }}" placeholder="Paste a video URL here" aria-label="Video URL" required>
                 </span>
                 <button id="analyze-btn" class="button" type="submit">
-                    <span>Analyze</span>
+                    <span>Get Download Options</span>
                     <svg class="button-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
                 </button>
             </form>
@@ -1303,12 +1303,13 @@
 
         async function fetchResult(url) {
             if (!url || !/^https?:\/\//i.test(url) || !analyzeForm) return;
+            if (typeof gtag === 'function') gtag('event', 'processing_started');
 
             analyzeBtn.disabled = true;
-            analyzeBtn.innerHTML = '<span class="spinner" style="width:18px;height:18px;margin:0 8px 0 0;border-width:2px"></span><span>Analyzing...</span>';
+            analyzeBtn.innerHTML = '<span class="spinner" style="width:18px;height:18px;margin:0 8px 0 0;border-width:2px"></span><span>Checking URL...</span>';
             errorContainer.style.display = 'none';
             errorContainer.textContent = '';
-            resultContainer.innerHTML = '<div class="loader-container result-fade-in"><div class="spinner"></div><div class="loader-text">Analyzing link and fetching formats...</div></div>';
+            resultContainer.innerHTML = '<div class="loader-container result-fade-in"><div class="spinner"></div><div class="loader-text">Fetching video information...</div></div>';
             document.querySelector('.download-panel').classList.add('has-result');
 
             try {
@@ -1320,11 +1321,13 @@
                     headers: {'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}
                 });
                 const data = await response.json();
-                if (!response.ok || !data.success) throw new Error(data.error || 'Failed to retrieve video data.');
+                if (!response.ok || !data.success) throw new Error('We couldn\'t process this URL. Please check that the link is public and try again.');
+                if (typeof gtag === 'function') gtag('event', 'processing_success');
                 resultContainer.innerHTML = `<div class="result-fade-in">${data.html}</div>`;
             } catch (error) {
+                if (typeof gtag === 'function') gtag('event', 'processing_failed');
                 resultContainer.innerHTML = '';
-                errorContainer.textContent = error.message || 'An error occurred while connecting to the server.';
+                errorContainer.textContent = 'We couldn\'t process the video right now. Please try again.';
                 errorContainer.style.display = 'block';
                 document.querySelector('.download-panel').classList.remove('has-result');
             } finally {
@@ -1365,6 +1368,7 @@
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
+                if (typeof gtag === 'function') gtag('event', 'download_started');
                 button.textContent = 'Started';
             } catch (error) {
                 button.textContent = 'Try again';
