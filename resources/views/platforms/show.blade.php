@@ -851,6 +851,22 @@
             <span class="platform-hero-badge"><i class="fas fa-rocket"></i> Supported Platforms</span>
             <h1>{{ $seoH1 }}</h1>
             <p>{{ $seoDescription }}</p>
+            @php
+                $relatedLandingPages = [
+                    'YouTube' => [['url' => route('youtube.shorts'), 'label' => 'YouTube Shorts Downloader']],
+                    'Instagram' => [['url' => route('instagram.reels'), 'label' => 'Instagram Reels Downloader']],
+                    'Facebook' => [['url' => route('facebook.reels'), 'label' => 'Facebook Reels Downloader']],
+                ][$platform->name] ?? [];
+            @endphp
+            @if(count($relatedLandingPages))
+                <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px;">
+                    @foreach($relatedLandingPages as $related)
+                        @if(request()->path() !== trim(parse_url($related['url'], PHP_URL_PATH), '/'))
+                            <a href="{{ $related['url'] }}" style="color:#c4b5fd;text-decoration:underline;">{{ $related['label'] }}</a>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
     <div class="download-panel-wrap">
