@@ -302,7 +302,7 @@
     <section class="platform-hero" style="margin-bottom: 2rem;">
         <div class="platform-hero-wrap">
             <span class="platform-hero-badge" style="margin-bottom:1.5rem;"><i class="fas fa-question-circle"></i> Find Answers</span>
-            <h1>{{ $settings->faq_h1 ?? 'Answers to Your Common Questions' }}</h1>
+            <h1>{{ $settings->faq_h1 ?? 'Video Downloader Frequently Asked Questions' }}</h1>
             <p>{{ $settings->faq_description ?? 'Find everything you need to know about downloading videos, quality settings, and platform support.' }}</p>
         </div>
     </section>
