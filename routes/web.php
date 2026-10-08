@@ -328,10 +328,33 @@ Route::post('/analyze', function (Request $request) {
         return strpos($cleanHost, $item['domain']) !== false;
     });
 
-    // RapidAPI is the working extractor used by the local download build. Use it
-    // first; Vidssave remains the fallback for installations without this key.
-    $rapid = config('services.rapidapi');
-    if (!empty($rapid['key'])) {
+    // Use the same Vidssave browser-plugin request as the working local build.
+    // The older contentsite form endpoint intermittently returns analyze_failed.
+    $vidssavePlugin = 'https://plugin.vidssave.com/api/plugin';
+    try {
+        $response = Http::asJson()->retry(1, 500)->timeout(25)->post($vidssavePlugin, [
+            'url' => '/media/parse',
+            'data' => [
+                'origin' => 'source',
+                'link' => $data['video_url'],
+                'plugin_token' => base64_encode('vidssave_brower_plugin_' . round(microtime(true) * 1000)),
+            ],
+            'token' => '',
+        ]);
+        $body = $response->json();
+        $videoData = $body['data'] ?? null;
+        if ($response->successful() && ($body['status'] ?? 0) === 1 && is_array($videoData) && !empty($videoData['resources'])) {
+            $pluginData = ['source' => $videoData];
+            // Continue through the existing Vidssave resource normalizer below.
+        }
+    } catch (\Throwable $exception) {
+        $pluginData = [];
+    }
+
+    if (empty($pluginData['source'])) {
+        // RapidAPI fallback for providers or regions where the plugin is unavailable.
+        $rapid = config('services.rapidapi');
+        if (!empty($rapid['key'])) {
         try {
             $response = Http::withHeaders([
                 'X-RapidAPI-Key' => $rapid['key'],
@@ -375,14 +398,15 @@ Route::post('/analyze', function (Request $request) {
         } catch (\Throwable $exception) {
             report($exception);
         }
+        }
     }
 
     $pluginEndpoint = 'https://api.vidssave.com/api/contentsite_api/media/parse';
     $pluginToken = base64_encode('vidssave_brower_plugin_' . round(microtime(true) * 1000));
 
     try {
-        $pluginData = [];
-        foreach (['cache', 'source'] as $origin) {
+        $pluginData = $pluginData ?? [];
+        foreach (empty($pluginData) ? ['cache', 'source'] : [] as $origin) {
             try {
                 $response = Http::asForm()->retry(1, 500)->timeout(15)->post($pluginEndpoint, [
                     'auth' => '20250901majwlqo',
