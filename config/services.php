@@ -31,12 +31,6 @@ return [
         'image_generation_enabled' => env('GEMINI_IMAGE_GENERATION_ENABLED', false),
     ],
 
-    'rapidapi' => [
-        'key' => env('RAPIDAPI_KEY'),
-        'host' => env('RAPIDAPI_HOST', 'social-download-all-in-one.p.rapidapi.com'),
-        'endpoint' => env('RAPIDAPI_ENDPOINT', 'https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink'),
-    ],
-
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),

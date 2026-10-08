@@ -351,56 +351,6 @@ Route::post('/analyze', function (Request $request) {
         $pluginData = [];
     }
 
-    if (empty($pluginData['source'])) {
-        // RapidAPI fallback for providers or regions where the plugin is unavailable.
-        $rapid = config('services.rapidapi');
-        if (!empty($rapid['key'])) {
-        try {
-            $response = Http::withHeaders([
-                'X-RapidAPI-Key' => $rapid['key'],
-                'X-RapidAPI-Host' => $rapid['host'],
-                'Accept' => 'application/json',
-            ])->timeout(25)->post($rapid['endpoint'], ['url' => $data['video_url']]);
-            $payload = $response->json();
-            $rapidData = is_array($payload['data'] ?? null) ? $payload['data'] : $payload;
-            if ($response->successful() && is_array($rapidData) && (!empty($rapidData['medias']) || !empty($rapidData['title']))) {
-                $resources = collect($rapidData['medias'] ?? [])->filter(fn ($m) => is_array($m) && !empty($m['url']))
-                    ->filter(fn ($m) => strtolower((string) ($m['extension'] ?? 'mp4')) !== 'webm')
-                    ->map(function ($m) {
-                        $isAudio = strtolower((string) ($m['type'] ?? 'video')) === 'audio';
-                        $format = strtoupper((string) ($m['extension'] ?? ($isAudio ? 'mp3' : 'mp4')));
-                        $quality = (string) ($m['quality'] ?? ($isAudio ? (($m['bitrate'] ?? 128) . ' kbps') : (($m['height'] ?? '') ? $m['height'] . 'p' : 'HD')));
-                        return [
-                            'category' => $isAudio ? 'audio' : 'video',
-                            'format' => $format,
-                            'quality' => $quality,
-                            'size' => $m['size'] ?? 'Size varies',
-                            'download_url' => $m['url'],
-                            'prepare_token' => null,
-                        ];
-                    })->unique(fn ($m) => strtolower($m['category'].'|'.$m['format'].'|'.$m['quality']))->values()->all();
-                if ($resources) {
-                    $resultData = [
-                        'url' => $data['video_url'], 'host' => $cleanHost,
-                        'platform' => $platform['name'] ?? 'Supported public source',
-                        'title' => $rapidData['title'] ?? 'Video', 'thumbnail' => $rapidData['thumbnail'] ?? null,
-                        'duration' => $rapidData['duration'] ?? 0, 'resources' => $resources,
-                    ];
-                    DB::table('download_logs')->insert([
-                        'platform' => $platform['name'] ?? 'Unknown', 'format' => '—', 'quality' => '—',
-                        'ip_address' => $request->ip(), 'type' => 'extraction', 'status' => true,
-                        'title' => substr((string) $resultData['title'], 0, 255), 'created_at' => now(), 'updated_at' => now(),
-                    ]);
-                    if ($request->ajax() || $request->wantsJson()) return response()->json(['success' => true, 'html' => view('partials.result', ['result' => $resultData])->render()]);
-                    return redirect()->route('home')->with('result', $resultData);
-                }
-            }
-        } catch (\Throwable $exception) {
-            report($exception);
-        }
-        }
-    }
-
     $pluginEndpoint = 'https://api.vidssave.com/api/contentsite_api/media/parse';
     $pluginToken = base64_encode('vidssave_brower_plugin_' . round(microtime(true) * 1000));
 
